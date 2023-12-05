@@ -132,12 +132,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SCRATCH] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_INFESTATION,
         .power = 40,
         .type = TYPE_NORMAL,
         .accuracy = 100,
         .pp = 35,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -314,12 +314,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_DOUBLE_KICK] =
     {
-        .effect = EFFECT_DOUBLE_HIT,
+        .effect = EFFECT_PARALYZE,
         .power = 30,
         .type = TYPE_FIGHTING,
         .accuracy = 100,
         .pp = 30,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -679,11 +679,11 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
     [MOVE_EMBER] =
     {
         .effect = EFFECT_BURN_HIT,
-        .power = 40,
+        .power = 5,
         .type = TYPE_FIRE,
         .accuracy = 100,
         .pp = 25,
-        .secondaryEffectChance = 10,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,
@@ -834,12 +834,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_PECK] =
     {
-        .effect = EFFECT_HIT,
+        .effect = EFFECT_POISON,
         .power = 35,
         .type = TYPE_FLYING,
         .accuracy = 100,
         .pp = 35,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_MAKES_CONTACT | FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED | FLAG_KINGS_ROCK_AFFECTED,
@@ -925,12 +925,12 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_ABSORB] =
     {
-        .effect = EFFECT_ABSORB,
+        .effect = EFFECT_INFESTATION,
         .power = 20,
         .type = TYPE_GRASS,
         .accuracy = 100,
         .pp = 20,
-        .secondaryEffectChance = 0,
+        .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
         .priority = 0,
         .flags = FLAG_PROTECT_AFFECTED | FLAG_MIRROR_MOVE_AFFECTED,

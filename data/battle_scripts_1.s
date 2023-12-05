@@ -232,6 +232,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCalmMind               @ EFFECT_CALM_MIND
 	.4byte BattleScript_EffectDragonDance            @ EFFECT_DRAGON_DANCE
 	.4byte BattleScript_EffectCamouflage             @ EFFECT_CAMOUFLAGE
+	.4byte BattleScript_EffectInfestationHit         @ EFFECT_INFESTATION
 
 BattleScript_EffectHit::
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
@@ -361,6 +362,10 @@ BattleScript_AbsorbTryFainting::
 
 BattleScript_EffectBurnHit::
 	setmoveeffect MOVE_EFFECT_BURN
+	goto BattleScript_EffectHit
+
+BattleScript_EffectInfestationHit::
+	setmoveeffect MOVE_EFFECT_INFESTATION @ changing this fixes it, makes it burn
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFreezeHit::
@@ -3752,6 +3757,11 @@ BattleScript_BurnTurnDmg::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoStatusTurnDmg
 
+BattleScript_InfestationTurnDmg::
+	printstring STRINGID_PKMNHURTBYINFESTATION
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_DoStatusTurnDmg
+
 BattleScript_MoveUsedIsFrozen::
 	printstring STRINGID_PKMNISFROZEN
 	waitmessage B_WAIT_TIME_LONG
@@ -3893,6 +3903,12 @@ BattleScript_MoveEffectPoison::
 BattleScript_MoveEffectBurn::
 	statusanimation BS_EFFECT_BATTLER
 	printfromtable gGotBurnedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectInfestation::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotInfestedStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_UpdateEffectStatusIconRet
 

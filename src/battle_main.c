@@ -3906,7 +3906,7 @@ static void HandleEndTurn_ContinueBattle(void)
     s32 i;
 
     if (gBattleControllerExecFlags == 0)
-    {
+    { 
         gBattleMainFunc = BattleTurnPassed;
         for (i = 0; i < BATTLE_COMMUNICATION_ENTRIES_COUNT; i++)
             gBattleCommunication[i] = 0;
@@ -4623,7 +4623,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
         speedBattler1 /= 2;
 
-    if (gBattleMons[battler1].status1 & STATUS1_PARALYSIS)
+    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) || (gBattleMons[battler1].status1 & STATUS1_INFESTATION))
         speedBattler1 /= 4;
 
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
@@ -4657,7 +4657,7 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
         speedBattler2 /= 2;
 
-    if (gBattleMons[battler2].status1 & STATUS1_PARALYSIS)
+    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) || (gBattleMons[battler2].status1 & STATUS1_INFESTATION))
         speedBattler2 /= 4;
 
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)

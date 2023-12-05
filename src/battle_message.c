@@ -430,6 +430,11 @@ static const u8 sText_SpAtk2[] = _("SP. ATK");
 static const u8 sText_SpDef2[] = _("SP. DEF");
 static const u8 sText_Accuracy[] = _("accuracy");
 static const u8 sText_Evasiveness[] = _("evasiveness");
+// majesity - custom messages
+static const u8 sText_PkmnWasInfested[] = _("{B_EFF_NAME_WITH_PREFIX} was infested!");
+static const u8 sText_PkmnInfestedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ninfested {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnHurtByInfestation[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby its infestation!");
+static const u8 sText_PkmnAlreadyHasInfestation[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas an infestation.");
 
 const u8 * const gStatNamesTable[NUM_BATTLE_STATS] =
 {
@@ -885,6 +890,11 @@ const u8 * const gBattleStringsTable[BATTLESTRINGS_COUNT - BATTLESTRINGS_TABLE_S
     [STRINGID_PKMNBOXLANETTESPCFULL - BATTLESTRINGS_TABLE_START] = gText_PkmnTransferredLanettesPCBoxFull,
     [STRINGID_TRAINER1WINTEXT - BATTLESTRINGS_TABLE_START] = sText_Trainer1WinText,
     [STRINGID_TRAINER2WINTEXT - BATTLESTRINGS_TABLE_START] = sText_Trainer2WinText,
+    // majesity added here 
+    [STRINGID_PKMNWASINFESTED - BATTLESTRINGS_TABLE_START] = sText_PkmnWasInfested,
+    [STRINGID_PKMNINFESTEDBY - BATTLESTRINGS_TABLE_START] = sText_PkmnInfestedBy,
+    [STRINGID_PKMNHURTBYINFESTATION - BATTLESTRINGS_TABLE_START] = sText_PkmnHurtByInfestation,
+
 };
 
 const u16 gMissStringIds[] =
@@ -1091,6 +1101,12 @@ const u16 gGotBurnedStringIds[] =
 {
     [B_MSG_STATUSED]            = STRINGID_PKMNWASBURNED,
     [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNBURNEDBY
+};
+
+const u16 gGotInfestedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASINFESTED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNINFESTEDBY
 };
 
 const u16 gGotFrozenStringIds[] =

@@ -433,6 +433,8 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SLP);
         else if (status == STATUS1_PARALYSIS)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
+        else if (status == STATUS1_INFESTATION)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTATION);
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }
@@ -447,7 +449,7 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
         else if (status & STATUS2_NIGHTMARE)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_NIGHTMARE);
         else if (status & STATUS2_WRAPPED)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_WRAPPED); // this animation doesn't actually exist
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTATION); // this animation doesn't actually exist I changed it in case of crash
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }

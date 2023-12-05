@@ -366,7 +366,11 @@ const u8 gHealthboxElementsGfxTable[] = INCBIN_U8("graphics/battle_interface/hpb
                                                   "graphics/battle_interface/status3.4bpp",
                                                   "graphics/battle_interface/status4.4bpp",
                                                   "graphics/battle_interface/healthbox_doubles_frameend.4bpp",
-                                                  "graphics/battle_interface/healthbox_doubles_frameend_bar.4bpp");
+                                                  "graphics/battle_interface/healthbox_doubles_frameend_bar.4bpp",
+                                                  "graphics/battle_interface/customStatus.4bpp",
+                                                  "graphics/battle_interface/customStatus2.4bpp",
+                                                  "graphics/battle_interface/customStatus3.4bpp",
+                                                  "graphics/battle_interface/customStatus4.4bpp"); // TODO - need to make 4 separate status thigns
 const u32 gBattleInterfaceGfx_UnusedWindow3[] = INCBIN_U32("graphics/battle_interface/unused_window3.4bpp.lz");
 const u32 gBattleInterfaceGfx_UnusedWindow4[] = INCBIN_U32("graphics/battle_interface/unused_window4.4bpp.lz");
 

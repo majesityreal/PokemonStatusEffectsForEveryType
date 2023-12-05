@@ -622,6 +622,8 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_PREVENT_ESCAPE] = STATUS2_ESCAPE_PREVENTION,
     [MOVE_EFFECT_NIGHTMARE]      = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH]         = STATUS2_LOCK_CONFUSE,
+    [MOVE_EFFECT_INFESTATION]    = STATUS1_INFESTATION,
+
 };
 
 static const u8 *const sMoveEffectBS_Ptrs[] =
@@ -665,6 +667,8 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_REMOVE_PARALYSIS] = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_ATK_DEF_DOWN]     = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_RECOIL_33]        = BattleScript_MoveEffectRecoil,
+    [MOVE_EFFECT_INFESTATION]      = BattleScript_MoveEffectInfestation,
+
 };
 
 static const struct WindowTemplate sUnusedWinTemplate =
@@ -2262,8 +2266,9 @@ void SetMoveEffect(bool8 primary, u8 certain)
     if (gBattleMons[gEffectBattler].status2 & STATUS2_SUBSTITUTE && affectsUser != MOVE_EFFECT_AFFECTS_USER)
         INCREMENT_RESET_RETURN
 
-    if (gBattleCommunication[MOVE_EFFECT_BYTE] <= PRIMARY_STATUS_MOVE_EFFECT)
+    if (gBattleCommunication[MOVE_EFFECT_BYTE] <= PRIMARY_STATUS_MOVE_EFFECT || gBattleCommunication[MOVE_EFFECT_BYTE] >= MOVE_EFFECT_INFESTATION) // I am adding all move effects after infestation
     {
+        
         switch (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]])
         {
         case STATUS1_SLEEP:
@@ -2371,6 +2376,23 @@ void SetMoveEffect(bool8 primary, u8 certain)
 
             statusChanged = TRUE;
             break;
+        case STATUS1_INFESTATION:
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_BUG)
+                && (gHitMarker & HITMARKER_STATUS_ABILITY_EFFECT)
+                && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+                {
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_BRNPrevention;
+
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STATUS_HAD_NO_EFFECT;
+                    RESET_RETURN
+                }
+                if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_BUG))
+                    break;
+                if (gBattleMons[gEffectBattler].status1)
+                    break;
+                statusChanged = TRUE;
+                break;
         case STATUS1_FREEZE:
             if (WEATHER_HAS_EFFECT && gBattleWeather & B_WEATHER_SUN)
                 noSunCanFreeze = FALSE;
@@ -9915,7 +9937,7 @@ static void Cmd_handleballthrow(void)
 
         if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE))
             odds *= 2;
-        if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON))
+        if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_INFESTATION))
             odds = (odds * 15) / 10;
 
         if (gLastUsedItem != ITEM_SAFARI_BALL)

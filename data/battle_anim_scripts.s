@@ -384,6 +384,7 @@ gBattleAnims_StatusConditions::
 	.4byte Status_Freeze                    @ B_ANIM_STATUS_FRZ
 	.4byte Status_Curse                     @ B_ANIM_STATUS_CURSED
 	.4byte Status_Nightmare                 @ B_ANIM_STATUS_NIGHTMARE
+	.4byte Status_Infestation               @ B_ANIM_STATUS_INFESTATION
 
 	.align 2
 gBattleAnims_General::
@@ -10225,8 +10226,8 @@ Status_Confusion:
 	loadspritegfx ANIM_TAG_DUCK
 	call ConfusionEffect
 	end
-
-Status_Burn:
+@ majesity aniani animation TODO anim add look here lol bro good one comment sneaky sneaky
+Status_Burn: 
 	loadspritegfx ANIM_TAG_SMALL_EMBER
 	playsewithpan SE_M_FLAME_WHEEL, SOUND_PAN_TARGET
 	call BurnFlame
@@ -10238,6 +10239,54 @@ BurnFlame:
 	createsprite gBurnFlameSpriteTemplate, ANIM_TARGET, 2, -24, 24, 24, 24, 20, 1, 1
 	delay 4
 	return
+
+Status_Infestation:
+	createvisualtask AnimTask_ShakeMon2, 2, ANIM_ATTACKER, 1, 0, 18, 2
+	createvisualtask AnimTask_BlendColorCycle, 2, F_PAL_ATTACKER, 2, 2, 0, 12, RGB(19, 26, 6)
+	@@@ this is the move string shot
+	loadspritegfx ANIM_TAG_STRING
+	loadspritegfx ANIM_TAG_WEB_THREAD
+	monbg ANIM_DEF_PARTNER
+	delay 0
+	createsprite gSimplePaletteBlendSpriteTemplate, ANIM_ATTACKER, 5, F_PAL_BG, 2, 0, 9, RGB_BLACK
+	loopsewithpan SE_M_STRING_SHOT, SOUND_PAN_ATTACKER, 9, 6
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	call StringShotThread
+	playsewithpan SE_M_STRING_SHOT2, SOUND_PAN_TARGET
+	createsprite gStringWrapSpriteTemplate, ANIM_TARGET, 2, 0, 10
+	delay 1
+	createsprite gStringWrapSpriteTemplate, ANIM_TARGET, 2, 0, -2
+	delay 1
+	createsprite gStringWrapSpriteTemplate, ANIM_TARGET, 2, 0, 22
+	clearmonbg ANIM_DEF_PARTNER
+	@@@ end string shot
+	@@@ spider web
+	loadspritegfx ANIM_TAG_SPIDER_WEB
+	monbg ANIM_DEF_PARTNER
+	splitbgprio ANIM_TARGET
+	playsewithpan SE_M_STRING_SHOT2, SOUND_PAN_TARGET
+	createsprite gSpiderWebSpriteTemplate, ANIM_ATTACKER, 2
+	waitforvisualfinish
+	clearmonbg ANIM_DEF_PARTNER
+	delay 0
+	end
+	@@@ end spider web
 
 Status_Infatuation:
 	loadspritegfx ANIM_TAG_MAGENTA_HEART
