@@ -381,11 +381,32 @@
 // majesity - custom battle string
 #define STRINGID_PKMNWASINFESTED            381
 #define STRINGID_PKMNINFESTEDBY             382
-#define STRINGID_PKMNHURTBYINFESTATION      383 
+#define STRINGID_PKMNHURTBYINFESTATION      383
 #define STRINGID_PKMNWASBLINDED             384
 #define STRINGID_PKMNBLINDEDBY              385
+#define STRINGID_PKMNWASPIERCED             386
+#define STRINGID_PKMNPIERCEDBY              387
+#define STRINGID_PKMNWASNULL                388
+#define STRINGID_PKMNNULLBY                 389
+#define STRINGID_PKMNWASRECKLESS            390
+#define STRINGID_PKMNRECKLESSBY             391
+#define STRINGID_PKMNWASSHAKEN              392
+#define STRINGID_PKMNSHAKENBY               393
+#define STRINGID_PKMNWASPETRIFIED           394
+#define STRINGID_PKMNPETRIFIEDBY            395
+#define STRINGID_PKMNWASSPOOKED             396
+#define STRINGID_PKMNSPOOKEDBY              397
+#define STRINGID_PKMNWASFLOODED             398
+#define STRINGID_PKMNFLOODEDBY              399
+#define STRINGID_PKMNWASFEAR                400
+#define STRINGID_PKMNFEARBY                 401
+#define STRINGID_PKMNWASROOTED              401
+#define STRINGID_PKMNROOTEDBY               402
+#define STRINGID_PKMNWASFLUSTERED           401
+#define STRINGID_PKMNFLUSTEREDBY            402
+#define STRINGID_PKMNHURTBYPIERCING         403
 
-#define BATTLESTRINGS_COUNT                 387
+#define BATTLESTRINGS_COUNT                 404
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,

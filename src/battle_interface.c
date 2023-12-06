@@ -159,15 +159,27 @@ enum
     HEALTHBOX_GFX_STATUS_INF_BATTLER0, //status1 "INF"
     HEALTHBOX_GFX_119,
     HEALTHBOX_GFX_120,
-    HEALTHBOX_GFX_STATUS_INF_BATTLER1, //status2 "PRZ"
+    HEALTHBOX_GFX_STATUS_INF_BATTLER1, //status2 "INF"
     HEALTHBOX_GFX_122,
     HEALTHBOX_GFX_123,
-    HEALTHBOX_GFX_STATUS_INF_BATTLER2, //status2 "SLP"
+    HEALTHBOX_GFX_STATUS_INF_BATTLER2, //status2 "INF"
     HEALTHBOX_GFX_125,
     HEALTHBOX_GFX_126,
-    HEALTHBOX_GFX_STATUS_INF_BATTLER3, //status2 "FRZ"
+    HEALTHBOX_GFX_STATUS_INF_BATTLER3, //status2 "INF"
     HEALTHBOX_GFX_128,
     HEALTHBOX_GFX_129,
+    HEALTHBOX_GFX_STATUS_PRC_BATTLER0, //status1 "PRC"
+    HEALTHBOX_GFX_131,
+    HEALTHBOX_GFX_132,
+    HEALTHBOX_GFX_STATUS_PRC_BATTLER1, //status2 "PRC"
+    HEALTHBOX_GFX_134,
+    HEALTHBOX_GFX_135,
+    HEALTHBOX_GFX_STATUS_PRC_BATTLER2, //status2 "PRC"
+    HEALTHBOX_GFX_137,
+    HEALTHBOX_GFX_138,
+    HEALTHBOX_GFX_STATUS_PRC_BATTLER3, //status2 "PRC"
+    HEALTHBOX_GFX_140,
+    HEALTHBOX_GFX_141,
 };
 
 static const u8 *GetHealthboxElementGfxPtr(u8);
@@ -758,7 +770,8 @@ enum
     PAL_STATUS_SLP,
     PAL_STATUS_FRZ,
     PAL_STATUS_BRN,
-    PAL_STATUS_INF
+    PAL_STATUS_INF,
+    PAL_STATUS_PRC
 };
 
 static const u16 sStatusIconColors[] =
@@ -769,6 +782,7 @@ static const u16 sStatusIconColors[] =
     [PAL_STATUS_FRZ] = RGB(17, 22, 28),
     [PAL_STATUS_BRN] = RGB(28, 14, 10),
     [PAL_STATUS_INF] = RGB(19, 26, 6),
+    [PAL_STATUS_PRC] = RGB(20, 20, 17),
 };
 
 static const struct WindowTemplate sHealthboxWindowTemplate = {
@@ -986,10 +1000,6 @@ u8 CreateSafariPlayerHealthboxSprites(void)
 
 static const u8 *GetHealthboxElementGfxPtr(u8 elementId)
 {
-    // MgbaOpen();
-    // MgbaPrintf(MGBA_LOG_ERROR, "Getting healthbox element %d", elementId);
-    // MgbaPrintf(MGBA_LOG_ERROR, "Returning healthbox art element %d", gHealthboxElementsGfxTable[elementId]);
-    // MgbaClose();
     return gHealthboxElementsGfxTable[elementId];
 }
 
@@ -2060,6 +2070,11 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     } // majesity custom status here
     else if (status & STATUS1_INFESTATION) {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_INF_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_INF;
+    }
+    else if (status & STATUS1_PIERCING) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PRC_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_PRC;
     }
     else
     {
@@ -2157,6 +2172,16 @@ static u8 GetStatusIconForBattlerId(u8 statusElementId, u8 battlerId)
             ret = HEALTHBOX_GFX_STATUS_INF_BATTLER2;
         else
             ret = HEALTHBOX_GFX_STATUS_INF_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_PRC_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_PRC_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_PRC_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_PRC_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_PRC_BATTLER3;
         break;
     }
     return ret;

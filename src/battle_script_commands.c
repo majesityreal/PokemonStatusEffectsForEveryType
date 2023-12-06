@@ -623,6 +623,19 @@ static const u32 sStatusFlagsForMoveEffects[NUM_MOVE_EFFECTS] =
     [MOVE_EFFECT_NIGHTMARE]      = STATUS2_NIGHTMARE,
     [MOVE_EFFECT_THRASH]         = STATUS2_LOCK_CONFUSE,
     [MOVE_EFFECT_INFESTATION]    = STATUS1_INFESTATION,
+    [MOVE_EFFECT_NULL]           = STATUS1_NULL,
+    [MOVE_EFFECT_RECKLESS]       = STATUS1_RECKLESS,
+    [MOVE_EFFECT_FLUSTERED]      = STATUS2_FLUSTERED,
+    [MOVE_EFFECT_SHAKEN]         = STATUS2_SHAKEN,
+    [MOVE_EFFECT_PETRIFIED]      = STATUS1_PETRIFIED,
+    [MOVE_EFFECT_SPOOKED]        = STATUS2_SPOOKED,
+    [MOVE_EFFECT_PIERCING]       = STATUS1_PIERCING,
+    [MOVE_EFFECT_FLOODED]        = STATUS1_FLOODED,
+    [MOVE_EFFECT_ROOTED]         = STATUS1_ROOTED,
+    [MOVE_EFFECT_FEAR]           = STATUS2_FEAR,
+    [MOVE_EFFECT_BLINDNESS]      = STATUS1_BLINDNESS,
+
+
 
 };
 
@@ -668,7 +681,16 @@ static const u8 *const sMoveEffectBS_Ptrs[] =
     [MOVE_EFFECT_ATK_DEF_DOWN]     = BattleScript_MoveEffectSleep,
     [MOVE_EFFECT_RECOIL_33]        = BattleScript_MoveEffectRecoil,
     [MOVE_EFFECT_INFESTATION]      = BattleScript_MoveEffectInfestation,
-
+    // [MOVE_EFFECT_NULL]             = BattleScript_MoveEffectNull,
+    // [MOVE_EFFECT_RECKLESS]         = BattleScript_MoveEffectReckless,
+    // [MOVE_EFFECT_FLUSTERED]        = BattleScript_MoveEffectFlustered,
+    // [MOVE_EFFECT_SHAKEN]           = BattleScript_MoveEffectShaken,
+    // [MOVE_EFFECT_PETRIFIED]        = BattleScript_MoveEffectPetrified,
+    // [MOVE_EFFECT_SPOOKED]          = BattleScript_MoveEffectSpooked,
+    [MOVE_EFFECT_PIERCING]         = BattleScript_MoveEffectPiercing,
+    // [MOVE_EFFECT_FLOODED]          = BattleScript_MoveEffectFlooded,
+    // [MOVE_EFFECT_FEAR]             = BattleScript_MoveEffectFear,
+    // [MOVE_EFFECT_BLINDNESS]        = BattleScript_MoveEffectBlindness,
 };
 
 static const struct WindowTemplate sUnusedWinTemplate =
@@ -2233,6 +2255,7 @@ u8 GetBattlerTurnOrderNum(u8 battlerId)
 
 void SetMoveEffect(bool8 primary, u8 certain)
 {
+
     bool32 statusChanged = FALSE;
     u8 affectsUser = 0; // 0x40 otherwise
     bool32 noSunCanFreeze = TRUE;
@@ -2268,7 +2291,11 @@ void SetMoveEffect(bool8 primary, u8 certain)
 
     if (gBattleCommunication[MOVE_EFFECT_BYTE] <= PRIMARY_STATUS_MOVE_EFFECT || gBattleCommunication[MOVE_EFFECT_BYTE] >= MOVE_EFFECT_INFESTATION) // I am adding all move effects after infestation
     {
-        
+            MgbaOpen();
+            MgbaPrintf(1, "Move effect here: %d", sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]]);
+            MgbaPrintf(1, "The piercing effect: %d", STATUS1_PIERCING);
+            MgbaPrintf(1, "The infestation effect: %d", STATUS1_INFESTATION);
+            MgbaClose();
         switch (sStatusFlagsForMoveEffects[gBattleCommunication[MOVE_EFFECT_BYTE]])
         {
         case STATUS1_SLEEP:
@@ -2388,6 +2415,43 @@ void SetMoveEffect(bool8 primary, u8 certain)
                     RESET_RETURN
                 }
                 if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_BUG))
+                    break;
+                if (gBattleMons[gEffectBattler].status1)
+                    break;
+                statusChanged = TRUE;
+                break;
+        case STATUS1_PIERCING:
+            MgbaOpen();
+            MgbaPrintf(1, "Piercing done here");
+            MgbaClose();
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL)
+                && (gHitMarker & HITMARKER_STATUS_ABILITY_EFFECT)
+                && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+                {
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_BRNPrevention;
+
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STATUS_HAD_NO_EFFECT;
+                    RESET_RETURN
+                }
+                if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_STEEL))
+                    break;
+                if (gBattleMons[gEffectBattler].status1)
+                    break;
+                statusChanged = TRUE;
+                break;
+        case STATUS1_BLINDNESS:
+            if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_DARK)
+                && (gHitMarker & HITMARKER_STATUS_ABILITY_EFFECT)
+                && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
+                {
+                    BattleScriptPush(gBattlescriptCurrInstr + 1);
+                    gBattlescriptCurrInstr = BattleScript_BRNPrevention;
+
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_STATUS_HAD_NO_EFFECT;
+                    RESET_RETURN
+                }
+                if (IS_BATTLER_OF_TYPE(gEffectBattler, TYPE_DARK))
                     break;
                 if (gBattleMons[gEffectBattler].status1)
                     break;
@@ -2513,11 +2577,17 @@ void SetMoveEffect(bool8 primary, u8 certain)
             }
 
             // for synchronize
-
             if (gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_POISON
              || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_TOXIC
              || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_PARALYSIS
-             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN)
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BURN
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_INFESTATION
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_NULL
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_RECKLESS
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_PIERCING
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_FLOODED
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_ROOTED
+             || gBattleCommunication[MOVE_EFFECT_BYTE] == MOVE_EFFECT_BLINDNESS)
              {
                 u8 *synchronizeEffect = &gBattleStruct->synchronizeMoveEffect;
                 *synchronizeEffect = gBattleCommunication[MOVE_EFFECT_BYTE];
@@ -2922,6 +2992,9 @@ void SetMoveEffect(bool8 primary, u8 certain)
 static void Cmd_seteffectwithchance(void)
 {
     u32 percentChance;
+    MgbaOpen();
+    MgbaPrintf(1, "Beginning of set effect with chance");
+    MgbaClose();
 
     if (gBattleMons[gBattlerAttacker].ability == ABILITY_SERENE_GRACE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
@@ -9937,7 +10010,7 @@ static void Cmd_handleballthrow(void)
 
         if (gBattleMons[gBattlerTarget].status1 & (STATUS1_SLEEP | STATUS1_FREEZE))
             odds *= 2;
-        if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_INFESTATION))
+        if (gBattleMons[gBattlerTarget].status1 & (STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_INFESTATION | STATUS1_PETRIFIED | STATUS1_PIERCING | STATUS1_FLOODED | STATUS1_ROOTED | STATUS1_BLINDNESS)) // this is the catch rate, add statuses that makei t easier to catch mons
             odds = (odds * 15) / 10;
 
         if (gLastUsedItem != ITEM_SAFARI_BALL)

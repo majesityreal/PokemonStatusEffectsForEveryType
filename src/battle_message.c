@@ -435,6 +435,35 @@ static const u8 sText_PkmnWasInfested[] = _("{B_EFF_NAME_WITH_PREFIX} was infest
 static const u8 sText_PkmnInfestedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ninfested {B_EFF_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnHurtByInfestation[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby its infestation!");
 static const u8 sText_PkmnAlreadyHasInfestation[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas an infestation.");
+static const u8 sText_PkmnWasPierced[] = _("{B_EFF_NAME_WITH_PREFIX} was pierced!");
+static const u8 sText_PkmnPiercedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\npierced {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnHurtByPiercing[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby its piercing!");
+static const u8 sText_PkmnAlreadyHasPiercing[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas piercing.");
+static const u8 sText_PkmnWasNull[] = _("{B_EFF_NAME_WITH_PREFIX} was NULLed!");
+static const u8 sText_PkmnNullBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nnulled {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnAlreadyHasNull[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas NULL.");
+static const u8 sText_PkmnAlreadyHasReckless[] = _("{B_DEF_NAME_WITH_PREFIX} already\nis reckless.");
+static const u8 sText_PkmnWasReckless[] = _("{B_EFF_NAME_WITH_PREFIX} was made reckless!");
+static const u8 sText_PkmnRecklessBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nmade reckless by {B_EFF_NAME_WITH_PREFIX}!");
+
+static const u8 sText_PkmnWasShaken[] = _("{B_EFF_NAME_WITH_PREFIX} was Shaken!");
+static const u8 sText_PkmnShakenBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nShaken {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnWasPetrified[] = _("{B_EFF_NAME_WITH_PREFIX} was Petrified!");
+static const u8 sText_PkmnPetrifiedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nPetrified {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnWasSpooked[] = _("{B_EFF_NAME_WITH_PREFIX} was Spooked!");
+static const u8 sText_PkmnSpookedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nSpooked {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnAlreadyHasSpooked[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Spooked.");
+static const u8 sText_PkmnWasFlooded[] = _("{B_EFF_NAME_WITH_PREFIX} was Flooded!");
+static const u8 sText_PkmnFloodedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nFlooded {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnAlreadyHasFlooded[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Flooded.");
+static const u8 sText_PkmnWasRooted[] = _("{B_EFF_NAME_WITH_PREFIX} was Rooted!");
+static const u8 sText_PkmnRootedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nRooted {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnAlreadyHasFear[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Fear.");
+static const u8 sText_PkmnWasFear[] = _("{B_EFF_NAME_WITH_PREFIX} was Fear!");
+static const u8 sText_PkmnFearBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nFear {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnAlreadyHasBlinded[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Blinded.");
+static const u8 sText_PkmnWasBlinded[] = _("{B_EFF_NAME_WITH_PREFIX} was Blinded!");
+static const u8 sText_PkmnBlindedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nBlinded {B_EFF_NAME_WITH_PREFIX}!");
 
 const u8 * const gStatNamesTable[NUM_BATTLE_STATS] =
 {
@@ -893,7 +922,26 @@ const u8 * const gBattleStringsTable[BATTLESTRINGS_COUNT - BATTLESTRINGS_TABLE_S
     // majesity added here 
     [STRINGID_PKMNWASINFESTED - BATTLESTRINGS_TABLE_START] = sText_PkmnWasInfested,
     [STRINGID_PKMNINFESTEDBY - BATTLESTRINGS_TABLE_START] = sText_PkmnInfestedBy,
+    [STRINGID_PKMNWASPIERCED - BATTLESTRINGS_TABLE_START] = sText_PkmnWasPierced,
+    [STRINGID_PKMNPIERCEDBY - BATTLESTRINGS_TABLE_START] = sText_PkmnPiercedBy,
     [STRINGID_PKMNHURTBYINFESTATION - BATTLESTRINGS_TABLE_START] = sText_PkmnHurtByInfestation,
+    [STRINGID_PKMNHURTBYPIERCING - BATTLESTRINGS_TABLE_START] = sText_PkmnHurtByPiercing,
+    [STRINGID_PKMNWASBLINDED- BATTLESTRINGS_TABLE_START] = sText_PkmnWasBlinded,             
+    [STRINGID_PKMNBLINDEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnBlindedBy,                        
+    [STRINGID_PKMNWASNULL- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasNull,               
+    [STRINGID_PKMNNULLBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnNullBy,               
+    [STRINGID_PKMNWASRECKLESS- BATTLESTRINGS_TABLE_START] = sText_PkmnWasReckless,            
+    [STRINGID_PKMNRECKLESSBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnRecklessBy,            
+    [STRINGID_PKMNWASSHAKEN- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasShaken,             
+    [STRINGID_PKMNSHAKENBY- BATTLESTRINGS_TABLE_START] = sText_PkmnShakenBy,              
+    [STRINGID_PKMNWASPETRIFIED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasPetrified,          
+    [STRINGID_PKMNPETRIFIEDBY- BATTLESTRINGS_TABLE_START] = sText_PkmnPetrifiedBy,            
+    [STRINGID_PKMNWASSPOOKED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasSpooked,            
+    [STRINGID_PKMNSPOOKEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnSpookedBy,             
+    [STRINGID_PKMNWASFLOODED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasFlooded,            
+    [STRINGID_PKMNFLOODEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnFloodedBy,             
+    [STRINGID_PKMNWASFEAR- BATTLESTRINGS_TABLE_START] = sText_PkmnWasFear,                
+    [STRINGID_PKMNFEARBY- BATTLESTRINGS_TABLE_START] = sText_PkmnFearBy,                 
 
 };
 
@@ -1107,6 +1155,72 @@ const u16 gGotInfestedStringIds[] =
 {
     [B_MSG_STATUSED]            = STRINGID_PKMNWASINFESTED,
     [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNINFESTEDBY
+};
+
+const u16 gGotPiercedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASPIERCED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNPIERCEDBY
+};
+
+const u16 gGotNullStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASNULL,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNNULLBY
+};
+
+const u16 gGotRecklessStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASRECKLESS,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNRECKLESSBY
+};
+
+const u16 gGotFlusteredStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASFLUSTERED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNFLUSTEREDBY
+};
+
+const u16 gGotShakenStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASSHAKEN,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNSHAKENBY
+};
+
+const u16 gGotPetrifiedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASPETRIFIED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNPETRIFIEDBY
+};
+
+const u16 gGotSpookedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASSPOOKED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNSPOOKEDBY
+};
+
+const u16 gGotFloodedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASFLOODED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNFLOODEDBY
+};
+
+const u16 gGotRootedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASROOTED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNROOTEDBY
+};
+
+const u16 gGotFearStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASFEAR,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNFEARBY
+};
+
+const u16 gGotBlindedStringIds[] =
+{
+    [B_MSG_STATUSED]            = STRINGID_PKMNWASBLINDED,
+    [B_MSG_STATUSED_BY_ABILITY] = STRINGID_PKMNBLINDEDBY
 };
 
 const u16 gGotFrozenStringIds[] =

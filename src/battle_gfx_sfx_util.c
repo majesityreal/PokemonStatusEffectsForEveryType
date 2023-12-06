@@ -435,6 +435,20 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PRZ);
         else if (status == STATUS1_INFESTATION)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTATION);
+        else if (status == STATUS1_PIERCING)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PIERCING);
+        else if (status == STATUS1_NULL)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_NULL);
+        else if (status == STATUS1_RECKLESS)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_RECKLESS);
+        else if (status == STATUS1_PETRIFIED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_PETRIFIED);
+        else if (status == STATUS1_FLOODED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FLOODED);
+        else if (status == STATUS1_ROOTED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_ROOTED);
+        else if (status == STATUS1_BLINDNESS)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_BLINDNESS);
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }
@@ -450,6 +464,14 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_NIGHTMARE);
         else if (status & STATUS2_WRAPPED)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTATION); // this animation doesn't actually exist I changed it in case of crash
+        else if (status & STATUS2_FLUSTERED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FLUSTERED);
+        else if (status & STATUS2_SHAKEN)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SHAKEN);
+        else if (status & STATUS2_SPOOKED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SPOOKED);
+        else if (status & STATUS2_FEAR)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FEAR);
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }

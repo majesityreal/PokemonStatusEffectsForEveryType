@@ -233,6 +233,17 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectDragonDance            @ EFFECT_DRAGON_DANCE
 	.4byte BattleScript_EffectCamouflage             @ EFFECT_CAMOUFLAGE
 	.4byte BattleScript_EffectInfestationHit         @ EFFECT_INFESTATION
+	.4byte BattleScript_EffectPiercingHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectNullHit         	 	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectRecklessHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectFlusteredHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectShakenHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectPetrifiedHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectSpookedHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectFloodedHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectRootedHit         	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectFearHit         	 	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectBlindHit         	 	 @ EFFECT_PIERCING
 
 BattleScript_EffectHit::
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
@@ -365,7 +376,51 @@ BattleScript_EffectBurnHit::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectInfestationHit::
-	setmoveeffect MOVE_EFFECT_INFESTATION @ changing this fixes it, makes it burn
+	setmoveeffect MOVE_EFFECT_INFESTATION
+	goto BattleScript_EffectHit
+
+BattleScript_EffectPiercingHit::
+	setmoveeffect MOVE_EFFECT_PIERCING
+	goto BattleScript_EffectHit
+
+BattleScript_EffectNullHit::
+	setmoveeffect MOVE_EFFECT_NULL
+	goto BattleScript_EffectHit
+
+BattleScript_EffectRecklessHit::
+	setmoveeffect MOVE_EFFECT_RECKLESS
+	goto BattleScript_EffectHit
+
+BattleScript_EffectFlusteredHit::
+	setmoveeffect MOVE_EFFECT_FLUSTERED
+	goto BattleScript_EffectHit
+
+BattleScript_EffectShakenHit::
+	setmoveeffect MOVE_EFFECT_SHAKEN
+	goto BattleScript_EffectHit
+
+BattleScript_EffectPetrifiedHit::
+	setmoveeffect MOVE_EFFECT_PETRIFIED
+	goto BattleScript_EffectHit
+
+BattleScript_EffectSpookedHit::
+	setmoveeffect MOVE_EFFECT_SPOOKED
+	goto BattleScript_EffectHit
+
+BattleScript_EffectFloodedHit::
+	setmoveeffect MOVE_EFFECT_FLOODED
+	goto BattleScript_EffectHit
+
+BattleScript_EffectRootedHit::
+	setmoveeffect MOVE_EFFECT_ROOTED
+	goto BattleScript_EffectHit
+
+BattleScript_EffectFearHit::
+	setmoveeffect MOVE_EFFECT_FEAR
+	goto BattleScript_EffectHit
+
+BattleScript_EffectBlindHit::
+	setmoveeffect MOVE_EFFECT_BLINDNESS
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFreezeHit::
@@ -3762,6 +3817,11 @@ BattleScript_InfestationTurnDmg::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoStatusTurnDmg
 
+BattleScript_PiercingTurnDmg::
+	printstring STRINGID_PKMNHURTBYPIERCING
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_DoStatusTurnDmg
+
 BattleScript_MoveUsedIsFrozen::
 	printstring STRINGID_PKMNISFROZEN
 	waitmessage B_WAIT_TIME_LONG
@@ -3909,6 +3969,12 @@ BattleScript_MoveEffectBurn::
 BattleScript_MoveEffectInfestation::
 	statusanimation BS_EFFECT_BATTLER
 	printfromtable gGotInfestedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectPiercing::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotPiercedStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_UpdateEffectStatusIconRet
 

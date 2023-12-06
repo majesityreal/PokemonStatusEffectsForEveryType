@@ -4509,7 +4509,6 @@ static void HandleTurnActionSelectionState(void)
             break;
         }
     }
-
     // Check if everyone chose actions.
     if (gBattleCommunication[ACTIONS_CONFIRMED_COUNT] == gBattlersCount)
     {

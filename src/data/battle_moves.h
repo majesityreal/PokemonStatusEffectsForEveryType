@@ -132,7 +132,7 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
 
     [MOVE_SCRATCH] =
     {
-        .effect = EFFECT_INFESTATION,
+        .effect = EFFECT_PIERCING,
         .power = 40,
         .type = TYPE_NORMAL,
         .accuracy = 100,

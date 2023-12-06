@@ -110,9 +110,16 @@
 #define STATUS1_TOXIC_POISON     (1 << 7)
 #define STATUS1_TOXIC_COUNTER    (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11)
 #define STATUS1_TOXIC_TURN(num)  ((num) << 8)
-#define STATUS1_INFESTATION      (1 << 12) // MAJESITY
+#define STATUS1_INFESTATION      (1 << 16) // MAJESITY
+#define STATUS1_NULL      (1 << 13) // MAJESITY
+#define STATUS1_RECKLESS      (1 << 14) // MAJESITY
+#define STATUS1_PETRIFIED      (1 << 15) // MAJESITY
+#define STATUS1_PIERCING      (1 << 12) // MAJESITY
+#define STATUS1_FLOODED      (1 << 17) // MAJESITY
+#define STATUS1_ROOTED      (1 << 18) // MAJESITY
+#define STATUS1_BLINDNESS      (1 << 19) // MAJESITY
 #define STATUS1_PSN_ANY          (STATUS1_POISON | STATUS1_TOXIC_POISON)
-#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_INFESTATION)
+#define STATUS1_ANY              (STATUS1_SLEEP | STATUS1_POISON | STATUS1_BURN | STATUS1_FREEZE | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_INFESTATION | STATUS1_NULL | STATUS1_RECKLESS | STATUS1_PETRIFIED | STATUS1_PIERCING | STATUS1_FLOODED | STATUS1_ROOTED | STATUS1_BLINDNESS )
 
 // Volatile status ailments
 // These are removed after exiting the battle or switching out
@@ -143,6 +150,10 @@
 #define STATUS2_FORESIGHT             (1 << 29)
 #define STATUS2_DEFENSE_CURL          (1 << 30)
 #define STATUS2_TORMENT               (1 << 31)
+#define STATUS2_FLUSTERED             (1 << 31) // MAJESITY
+#define STATUS2_SHAKEN                (1 << 31) // MAJESITY
+#define STATUS2_SPOOKED               (1 << 31) // MAJESITY
+#define STATUS2_FEAR                  (1 << 31) // MAJESITY
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
 #define STATUS3_LEECHSEED_BATTLER       (1 << 0 | 1 << 1) // The battler to receive HP from Leech Seed
@@ -294,7 +305,18 @@
 #define MOVE_EFFECT_SP_ATK_TWO_DOWN     59
 // MAJESITY my move effects
 #define MOVE_EFFECT_INFESTATION         60
-#define NUM_MOVE_EFFECTS                61
+#define MOVE_EFFECT_PIERCING            61
+#define MOVE_EFFECT_NULL                62
+#define MOVE_EFFECT_RECKLESS            63
+#define MOVE_EFFECT_FLUSTERED           64
+#define MOVE_EFFECT_SHAKEN              65
+#define MOVE_EFFECT_PETRIFIED           66
+#define MOVE_EFFECT_SPOOKED             67
+#define MOVE_EFFECT_FLOODED             68
+#define MOVE_EFFECT_ROOTED              69
+#define MOVE_EFFECT_FEAR                70
+#define MOVE_EFFECT_BLINDNESS           71
+#define NUM_MOVE_EFFECTS                72
 
 #define MOVE_EFFECT_AFFECTS_USER        (1 << 6) // 64
 #define MOVE_EFFECT_CERTAIN             (1 << 7) // 128

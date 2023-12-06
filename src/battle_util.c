@@ -1442,6 +1442,7 @@ enum
     ENDTURN_YAWN,
     ENDTURN_ITEMS2,
     ENDTURN_INFESTATION, // Majesity - you have to add everything BEFORE the battler_count because it is used as a size variable (stupid - just name the enum instead)
+    ENDTURN_PIERCING,
     ENDTURN_BATTLER_COUNT
 };
 
@@ -1549,6 +1550,17 @@ u8 DoBattlerEndTurnEffects(void)
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptExecute(BattleScript_InfestationTurnDmg);
+                    effect++;
+                }
+                gBattleStruct->turnEffectsTracker++;
+                break;
+            case ENDTURN_PIERCING:  // piercing
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_PIERCING) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    BattleScriptExecute(BattleScript_PiercingTurnDmg);
                     effect++;
                 }
                 gBattleStruct->turnEffectsTracker++;

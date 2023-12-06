@@ -398,7 +398,17 @@
 #define B_ANIM_STATUS_CURSED            7
 #define B_ANIM_STATUS_NIGHTMARE         8
 #define B_ANIM_STATUS_INFESTATION       9
-#define B_ANIM_STATUS_BLINDNESS         10
+#define B_ANIM_STATUS_PIERCING          10
+#define B_ANIM_STATUS_NULL              11
+#define B_ANIM_STATUS_RECKLESS          12
+#define B_ANIM_STATUS_FLUSTERED         13
+#define B_ANIM_STATUS_SHAKEN            14
+#define B_ANIM_STATUS_PETRIFIED         15
+#define B_ANIM_STATUS_SPOOKED           16
+#define B_ANIM_STATUS_FLOODED           17
+#define B_ANIM_STATUS_ROOTED            18
+#define B_ANIM_STATUS_FEAR              19
+#define B_ANIM_STATUS_BLINDNESS         20
 
 // Tasks with return values often assign them to gBattleAnimArgs[7].
 #define ARG_RET_ID 7
