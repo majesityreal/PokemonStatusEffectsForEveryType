@@ -133,6 +133,17 @@ s32 DoPoisonFieldEffect(void)
             SetMonData(pokemon, MON_DATA_HP, &hp);
             numPoisoned++;
         }
+        // MAJESITY - spooked TODO - add here later if want to change
+        // if (GetMonData(pokemon, MON_DATA_SANITY_HAS_SPECIES) && GetAilmentFromStatus(GetMonData(pokemon, MON_DATA_STATUS)) == AILMENT_SPO)
+        // {
+        //     // Apply spooked damage
+        //     hp = GetMonData(pokemon, MON_DATA_HP);
+        //     if (hp == 0 || --hp == 0)
+        //         numFainted++;
+
+        //     SetMonData(pokemon, MON_DATA_HP, &hp);
+        //     numPoisoned++;
+        // }
         pokemon++;
     }
 

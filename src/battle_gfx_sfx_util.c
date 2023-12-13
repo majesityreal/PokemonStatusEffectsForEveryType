@@ -423,6 +423,16 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
     gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 1;
     if (!isStatus2)
     {
+        // doing our custom volatile statuses here (status 3)
+        if(gStatuses3[gActiveBattler] & STATUS3_SPOOKED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SPOOKED);
+        if(gStatuses3[gActiveBattler] & STATUS3_FLUSTERED)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FLUSTERED);
+        if(gStatuses3[gActiveBattler] & STATUS3_SHAKEN)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SHAKEN);
+        if(gStatuses3[gActiveBattler] & STATUS3_FEAR)
+            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FEAR);
+        // here is vanilla:
         if (status == STATUS1_FREEZE)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FRZ);
         else if (status == STATUS1_POISON || status & STATUS1_TOXIC_POISON)
@@ -464,14 +474,6 @@ void InitAndLaunchChosenStatusAnimation(bool8 isStatus2, u32 status)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_NIGHTMARE);
         else if (status & STATUS2_WRAPPED)
             LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_INFESTATION); // this animation doesn't actually exist I changed it in case of crash
-        else if (status & STATUS2_FLUSTERED)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FLUSTERED);
-        else if (status & STATUS2_SHAKEN)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SHAKEN);
-        else if (status & STATUS2_SPOOKED)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_SPOOKED);
-        else if (status & STATUS2_FEAR)
-            LaunchStatusAnimation(gActiveBattler, B_ANIM_STATUS_FEAR);
         else // no animation
             gBattleSpritesDataPtr->healthBoxesData[gActiveBattler].statusAnimActive = 0;
     }

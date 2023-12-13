@@ -224,13 +224,13 @@ extern const u8 BattleScript_ActionGetNear[];
 extern const u8 BattleScript_ActionThrowPokeblock[];
 // MAJESITY
 extern const u8 BattleScript_MoveEffectInfestation[];
+extern const u8 BattleScript_MoveEffectPiercing[];
 extern const u8 BattleScript_MoveEffectNull[];
 extern const u8 BattleScript_MoveEffectReckless[];
 extern const u8 BattleScript_MoveEffectFlustered[];
 extern const u8 BattleScript_MoveEffectShaken[];
 extern const u8 BattleScript_MoveEffectPetrified[];
 extern const u8 BattleScript_MoveEffectSpooked[];
-extern const u8 BattleScript_MoveEffectPiercing[];
 extern const u8 BattleScript_MoveEffectFlooded[];
 extern const u8 BattleScript_MoveEffectRooted[];
 extern const u8 BattleScript_MoveEffectFear[];
@@ -238,6 +238,9 @@ extern const u8 BattleScript_MoveEffectBlindness[];
 // turn damage
 extern const u8 BattleScript_InfestationTurnDmg[];
 extern const u8 BattleScript_PiercingTurnDmg[];
+extern const u8 BattleScript_SpookedTurnDmg[];
 
+extern const u8 BattleScript_SelectingNotAllowedMoveReckless[]; // is reckless and tries to select status move
+extern const u8 BattleScript_MoveUsedIsReckless[]; // for when 'mon selects status move but then gets turned reckless
 
 #endif // GUARD_BATTLE_SCRIPTS_H

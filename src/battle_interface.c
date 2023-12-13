@@ -180,6 +180,78 @@ enum
     HEALTHBOX_GFX_STATUS_PRC_BATTLER3, //status2 "PRC"
     HEALTHBOX_GFX_140,
     HEALTHBOX_GFX_141,
+    HEALTHBOX_GFX_STATUS_NULL_BATTLER0, //status1 "NULL"
+    HEALTHBOX_GFX_143,
+    HEALTHBOX_GFX_144,
+    HEALTHBOX_GFX_STATUS_NULL_BATTLER1, //status2 "NULL"
+    HEALTHBOX_GFX_146,
+    HEALTHBOX_GFX_147,
+    HEALTHBOX_GFX_STATUS_NULL_BATTLER2, //status2 "NULL"
+    HEALTHBOX_GFX_149,
+    HEALTHBOX_GFX_150,
+    HEALTHBOX_GFX_STATUS_NULL_BATTLER3, //status2 "NULL"
+    HEALTHBOX_GFX_152,
+    HEALTHBOX_GFX_153,
+    HEALTHBOX_GFX_STATUS_RCK_BATTLER0, //status1 "RCK"
+    HEALTHBOX_GFX_155,
+    HEALTHBOX_GFX_156,
+    HEALTHBOX_GFX_STATUS_RCK_BATTLER1, //status2 "RCK"
+    HEALTHBOX_GFX_158,
+    HEALTHBOX_GFX_159,
+    HEALTHBOX_GFX_STATUS_RCK_BATTLER2, //status2 "RCK"
+    HEALTHBOX_GFX_161,
+    HEALTHBOX_GFX_162,
+    HEALTHBOX_GFX_STATUS_RCK_BATTLER3, //status2 "RCK"
+    HEALTHBOX_GFX_164,
+    HEALTHBOX_GFX_165,
+    HEALTHBOX_GFX_STATUS_PET_BATTLER0, //status1 "PET"
+    HEALTHBOX_GFX_167,
+    HEALTHBOX_GFX_168,
+    HEALTHBOX_GFX_STATUS_PET_BATTLER1, //status2 "PET"
+    HEALTHBOX_GFX_170,
+    HEALTHBOX_GFX_171,
+    HEALTHBOX_GFX_STATUS_PET_BATTLER2, //status2 "PET"
+    HEALTHBOX_GFX_173,
+    HEALTHBOX_GFX_174,
+    HEALTHBOX_GFX_STATUS_PET_BATTLER3, //status2 "PET"
+    HEALTHBOX_GFX_176,
+    HEALTHBOX_GFX_177,
+    HEALTHBOX_GFX_STATUS_FLO_BATTLER0, //status1 "FLO"
+    HEALTHBOX_GFX_179,
+    HEALTHBOX_GFX_180,
+    HEALTHBOX_GFX_STATUS_FLO_BATTLER1, //status2 "FLO"
+    HEALTHBOX_GFX_182,
+    HEALTHBOX_GFX_183,
+    HEALTHBOX_GFX_STATUS_FLO_BATTLER2, //status2 "FLO"
+    HEALTHBOX_GFX_185,
+    HEALTHBOX_GFX_186,
+    HEALTHBOX_GFX_STATUS_FLO_BATTLER3, //status2 "FLO"
+    HEALTHBOX_GFX_188,
+    HEALTHBOX_GFX_189,
+    HEALTHBOX_GFX_STATUS_ROO_BATTLER0, //status1 "ROO"
+    HEALTHBOX_GFX_191,
+    HEALTHBOX_GFX_192,
+    HEALTHBOX_GFX_STATUS_ROO_BATTLER1, //status2 "ROO"
+    HEALTHBOX_GFX_194,
+    HEALTHBOX_GFX_195,
+    HEALTHBOX_GFX_STATUS_ROO_BATTLER2, //status2 "ROO"
+    HEALTHBOX_GFX_197,
+    HEALTHBOX_GFX_198,
+    HEALTHBOX_GFX_STATUS_ROO_BATTLER3, //status2 "ROO"
+    HEALTHBOX_GFX_200,
+    HEALTHBOX_GFX_201,
+    HEALTHBOX_GFX_STATUS_BLD_BATTLER0, //status1 "BLD"
+    HEALTHBOX_GFX_203,
+    HEALTHBOX_GFX_204,
+    HEALTHBOX_GFX_STATUS_BLD_BATTLER1, //status2 "BLD"
+    HEALTHBOX_GFX_206,
+    HEALTHBOX_GFX_207,
+    HEALTHBOX_GFX_STATUS_BLD_BATTLER2, //status2 "BLD"
+    HEALTHBOX_GFX_209,
+    HEALTHBOX_GFX_210,
+    HEALTHBOX_GFX_STATUS_BLD_BATTLER3, //status2 "BLD"
+    HEALTHBOX_GFX_212,
+    HEALTHBOX_GFX_213,
 };
 
 static const u8 *GetHealthboxElementGfxPtr(u8);
@@ -771,7 +843,13 @@ enum
     PAL_STATUS_FRZ,
     PAL_STATUS_BRN,
     PAL_STATUS_INF,
-    PAL_STATUS_PRC
+    PAL_STATUS_PRC,
+    PAL_STATUS_NULL,
+    PAL_STATUS_RCK,
+    PAL_STATUS_PET,
+    PAL_STATUS_FLO,
+    PAL_STATUS_ROO,
+    PAL_STATUS_BLD
 };
 
 static const u16 sStatusIconColors[] =
@@ -781,8 +859,15 @@ static const u16 sStatusIconColors[] =
     [PAL_STATUS_SLP] = RGB(20, 20, 17),
     [PAL_STATUS_FRZ] = RGB(17, 22, 28),
     [PAL_STATUS_BRN] = RGB(28, 14, 10),
-    [PAL_STATUS_INF] = RGB(19, 26, 6),
+    [PAL_STATUS_INF] = RGB(19, 26, 6), // this one is also different from party party: para yellow
     [PAL_STATUS_PRC] = RGB(20, 20, 17),
+    [PAL_STATUS_NULL] = RGB(20, 20, 17),
+    [PAL_STATUS_RCK] = RGB(22, 4, 4),
+    [PAL_STATUS_PET] = RGB(22, 15, 3), // this one is different. Brown, party: para yellow
+    [PAL_STATUS_FLO] = RGB(17, 22, 28),
+    [PAL_STATUS_ROO] = RGB(5, 18, 12), // MAJESITY - this one is different from party image party: poison purple
+    [PAL_STATUS_BLD] = RGB(7, 7, 7),
+
 };
 
 static const struct WindowTemplate sHealthboxWindowTemplate = {
@@ -2067,7 +2152,8 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PRZ_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_PAR;
-    } // majesity custom status here
+    } 
+    // majesity custom status here
     else if (status & STATUS1_INFESTATION) {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_INF_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_INF;
@@ -2075,6 +2161,30 @@ static void UpdateStatusIconInHealthbox(u8 healthboxSpriteId)
     else if (status & STATUS1_PIERCING) {
         statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PRC_BATTLER0, battlerId));
         statusPalId = PAL_STATUS_PRC;
+    }
+    else if (status & STATUS1_NULL) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_NULL_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_NULL;
+    }
+    else if (status & STATUS1_RECKLESS) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_RCK_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_RCK;
+    }
+    else if (status & STATUS1_PETRIFIED) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_PET_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_PET;
+    }
+    else if (status & STATUS1_FLOODED) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_FLO_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_FLO;
+    }
+    else if (status & STATUS1_ROOTED) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_ROO_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_ROO;
+    }
+    else if (status & STATUS1_BLINDNESS) {
+        statusGfxPtr = GetHealthboxElementGfxPtr(GetStatusIconForBattlerId(HEALTHBOX_GFX_STATUS_BLD_BATTLER0, battlerId));
+        statusPalId = PAL_STATUS_BLD;
     }
     else
     {
@@ -2182,6 +2292,66 @@ static u8 GetStatusIconForBattlerId(u8 statusElementId, u8 battlerId)
             ret = HEALTHBOX_GFX_STATUS_PRC_BATTLER2;
         else
             ret = HEALTHBOX_GFX_STATUS_PRC_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_NULL_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_NULL_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_NULL_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_NULL_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_NULL_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_RCK_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_RCK_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_RCK_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_RCK_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_RCK_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_PET_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_PET_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_PET_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_PET_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_PET_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_FLO_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_FLO_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_FLO_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_FLO_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_FLO_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_ROO_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_ROO_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_ROO_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_ROO_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_ROO_BATTLER3;
+        break;
+    case HEALTHBOX_GFX_STATUS_BLD_BATTLER0:
+        if (battlerId == 0)
+            ret = HEALTHBOX_GFX_STATUS_BLD_BATTLER0;
+        else if (battlerId == 1)
+            ret = HEALTHBOX_GFX_STATUS_BLD_BATTLER1;
+        else if (battlerId == 2)
+            ret = HEALTHBOX_GFX_STATUS_BLD_BATTLER2;
+        else
+            ret = HEALTHBOX_GFX_STATUS_BLD_BATTLER3;
         break;
     }
     return ret;

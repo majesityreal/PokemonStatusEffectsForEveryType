@@ -111,10 +111,10 @@
 #define STATUS1_TOXIC_COUNTER    (1 << 8 | 1 << 9 | 1 << 10 | 1 << 11)
 #define STATUS1_TOXIC_TURN(num)  ((num) << 8)
 #define STATUS1_INFESTATION      (1 << 16) // MAJESITY
+#define STATUS1_PIERCING      (1 << 12) // MAJESITY
 #define STATUS1_NULL      (1 << 13) // MAJESITY
 #define STATUS1_RECKLESS      (1 << 14) // MAJESITY
 #define STATUS1_PETRIFIED      (1 << 15) // MAJESITY
-#define STATUS1_PIERCING      (1 << 12) // MAJESITY
 #define STATUS1_FLOODED      (1 << 17) // MAJESITY
 #define STATUS1_ROOTED      (1 << 18) // MAJESITY
 #define STATUS1_BLINDNESS      (1 << 19) // MAJESITY
@@ -150,10 +150,6 @@
 #define STATUS2_FORESIGHT             (1 << 29)
 #define STATUS2_DEFENSE_CURL          (1 << 30)
 #define STATUS2_TORMENT               (1 << 31)
-#define STATUS2_FLUSTERED             (1 << 31) // MAJESITY
-#define STATUS2_SHAKEN                (1 << 31) // MAJESITY
-#define STATUS2_SPOOKED               (1 << 31) // MAJESITY
-#define STATUS2_FEAR                  (1 << 31) // MAJESITY
 
 // Seems like per-battler statuses. Not quite sure how to categorize these
 #define STATUS3_LEECHSEED_BATTLER       (1 << 0 | 1 << 1) // The battler to receive HP from Leech Seed
@@ -176,6 +172,10 @@
 #define STATUS3_UNDERWATER              (1 << 18)
 #define STATUS3_INTIMIDATE_POKES        (1 << 19)
 #define STATUS3_TRACE                   (1 << 20)
+#define STATUS3_SPOOKED                 (1 << 21) // MAJESITY
+#define STATUS3_FLUSTERED               (1 << 22) // MAJESITY
+#define STATUS3_SHAKEN                  (1 << 23) // MAJESITY
+#define STATUS3_FEAR                    (1 << 24) // MAJESITY
 #define STATUS3_SEMI_INVULNERABLE       (STATUS3_UNDERGROUND | STATUS3_ON_AIR | STATUS3_UNDERWATER)
 
 // Not really sure what a "hitmarker" is.
@@ -318,7 +318,7 @@
 #define MOVE_EFFECT_BLINDNESS           71
 #define NUM_MOVE_EFFECTS                72
 
-#define MOVE_EFFECT_AFFECTS_USER        (1 << 6) // 64
+#define MOVE_EFFECT_AFFECTS_USER        (1 << 7) // 64
 #define MOVE_EFFECT_CERTAIN             (1 << 7) // 128
 
 // Battle terrain defines for gBattleTerrain.

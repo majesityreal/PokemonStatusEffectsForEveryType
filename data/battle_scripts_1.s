@@ -96,7 +96,7 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectSkyAttack              @ EFFECT_SKY_ATTACK
 	.4byte BattleScript_EffectConfuseHit             @ EFFECT_CONFUSE_HIT
 	.4byte BattleScript_EffectTwineedle              @ EFFECT_TWINEEDLE
-	.4byte BattleScript_EffectHit                    @ EFFECT_VITAL_THROW
+	.4byte BattleScript_EffectVitalThrow             @ EFFECT_VITAL_THROW
 	.4byte BattleScript_EffectSubstitute             @ EFFECT_SUBSTITUTE
 	.4byte BattleScript_EffectRecharge               @ EFFECT_RECHARGE
 	.4byte BattleScript_EffectRage                   @ EFFECT_RAGE
@@ -234,22 +234,27 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCamouflage             @ EFFECT_CAMOUFLAGE
 	.4byte BattleScript_EffectInfestationHit         @ EFFECT_INFESTATION
 	.4byte BattleScript_EffectPiercingHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectNullHit         	 	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectRecklessHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectFlusteredHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectShakenHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectPetrifiedHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectSpookedHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectFloodedHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectRootedHit         	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectFearHit         	 	 @ EFFECT_PIERCING
-	.4byte BattleScript_EffectBlindHit         	 	 @ EFFECT_PIERCING
+	.4byte BattleScript_EffectNullHit         	 	 @ Null
+	.4byte BattleScript_EffectRecklessHit         	 @ Reckless
+	.4byte BattleScript_EffectFlusteredHit         	 @ Flustered
+	.4byte BattleScript_EffectShakenHit         	 @ Shaken
+	.4byte BattleScript_EffectPetrifiedHit         	 @ Petrified
+	.4byte BattleScript_EffectSpookedHit         	 @ Spooked
+	.4byte BattleScript_EffectFloodedHit         	 @ Flooded
+	.4byte BattleScript_EffectRootedHit         	 @ Rooted
+	.4byte BattleScript_EffectFearHit         	 	 @ Fear
+	.4byte BattleScript_EffectBlindHit         	 	 @ Blind
 
+BattleScript_EffectVitalThrow::
+	accuracycheck BattleScript_EffectHit, 50
+	setmoveeffect MOVE_EFFECT_SHAKEN
 BattleScript_EffectHit::
+	@ we are setting flinch effect before the 'attackcanceler' because that is what checks flinching
+	@ jumpifstatus BS_ATTACKER, STATUS1_PETRIFIED, BattleScript_AttackWhileHavingReckless @ MAJESITY - this is where we add recoil to all attacks for reckless
 	jumpifnotmove MOVE_SURF, BattleScript_HitFromAtkCanceler
 	jumpifnostatus3 BS_TARGET, STATUS3_UNDERWATER, BattleScript_HitFromAtkCanceler
 	orword gHitMarker, HITMARKER_IGNORE_UNDERWATER
-	setbyte sDMG_MULTIPLIER, 2
+	setbyte sDMG_MULTIPLIER, 2 @ This is where underwater damage is multiplied by 2... but why? where is the dig 2x multiplier? and fly thunder 2x????
 BattleScript_HitFromAtkCanceler::
 	attackcanceler
 BattleScript_HitFromAccCheck::
@@ -274,11 +279,24 @@ BattleScript_HitFromAtkAnimation::
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
+	jumpifmove MOVE_FACADE, BattleScript_FacadeNullStatus
 	seteffectwithchance
 	tryfaintmon BS_TARGET
+	jumpifstatus BS_ATTACKER, STATUS1_RECKLESS, BattleScript_AttackWhileHavingReckless @ MAJESITY - this is where we add recoil to all attacks for reckless
 BattleScript_MoveEnd::
+BattleScript_MoveEndAfterMiss:: @ I am adding this so it does not print from missed move
+BattleScript_MoveEndAfterRecklessCheck::
 	moveendall
 	end
+
+BattleScript_FacadeNullStatus::
+	setmoveeffect MOVE_EFFECT_NULL
+	seteffectprimary
+	goto BattleScript_MoveEnd
+
+BattleScript_HitFromPetrified::
+	setmoveeffect MOVE_EFFECT_FLINCH
+	goto BattleScript_HitFromAtkCanceler
 
 BattleScript_MakeMoveMissed::
 	orbyte gMoveResultFlags, MOVE_RESULT_MISSED
@@ -291,7 +309,7 @@ BattleScript_MoveMissed::
 	effectivenesssound
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
+	goto BattleScript_MoveEndAfterMiss
 
 BattleScript_EffectSleep::
 	attackcanceler
@@ -388,7 +406,7 @@ BattleScript_EffectNullHit::
 	goto BattleScript_EffectHit
 
 BattleScript_EffectRecklessHit::
-	setmoveeffect MOVE_EFFECT_RECKLESS
+	setmoveeffect MOVE_EFFECT_RECKLESS 
 	goto BattleScript_EffectHit
 
 BattleScript_EffectFlusteredHit::
@@ -1749,6 +1767,8 @@ BattleScript_EffectMagnitude::
 	pause B_WAIT_TIME_SHORT
 	printstring STRINGID_MAGNITUDESTRENGTH
 	waitmessage B_WAIT_TIME_LONG
+	accuracycheck BattleScript_HitsAllWithUndergroundBonusLoop, 50
+	setmoveeffect MOVE_EFFECT_SHAKEN
 	goto BattleScript_HitsAllWithUndergroundBonusLoop
 
 BattleScript_EffectBatonPass::
@@ -1927,7 +1947,14 @@ BattleScript_DoHitAllWithUndergroundBonus::
 	tryfaintmon BS_TARGET
 	moveendto MOVEEND_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_HitsAllWithUndergroundBonusLoop
+	accuracycheck BattleScript_End, 50
+	setmoveeffect MOVE_EFFECT_SHAKEN
 	end
+
+@ MAJESITY - I am using this for accuracycheck because you cannot do: accuracycheck end, 50 you must do: accuracycheck BattleScript_End, 50
+BattleScript_End::
+	end
+
 BattleScript_HitAllWithUndergroundBonusMissed::
 	pause B_WAIT_TIME_SHORT
 	typecalc
@@ -1936,6 +1963,8 @@ BattleScript_HitAllWithUndergroundBonusMissed::
 	waitmessage B_WAIT_TIME_LONG
 	moveendto MOVEEND_NEXT_TARGET
 	jumpifnexttargetvalid BattleScript_HitsAllWithUndergroundBonusLoop
+	setmoveeffect MOVE_EFFECT_SHAKEN
+	seteffectprimary
 	end
 
 BattleScript_EffectFutureSight::
@@ -2310,7 +2339,8 @@ BattleScript_MementoTargetProtectEnd:
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectFacade::
-	jumpifstatus BS_ATTACKER, STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON, BattleScript_FacadeDoubleDmg
+	setmoveeffect MOVE_EFFECT_BURN
+	jumpifstatus BS_ATTACKER, STATUS1_POISON | STATUS1_BURN | STATUS1_PARALYSIS | STATUS1_TOXIC_POISON | STATUS1_INFESTATION | STATUS1_ROOTED | STATUS1_PETRIFIED | STATUS1_BLINDNESS | STATUS1_FLOODED | STATUS1_PIERCING, BattleScript_FacadeDoubleDmg
 	goto BattleScript_EffectHit
 
 BattleScript_FacadeDoubleDmg::
@@ -2686,6 +2716,17 @@ BattleScript_TeeterDanceMissed::
 	goto BattleScript_TeeterDanceDoMoveEndIncrement
 
 BattleScript_EffectMudSport::
+	attackcanceler
+	attackstring
+	ppreduce
+	settypebasedhalvers BattleScript_ButItFailed
+	attackanimation
+	waitanimation
+	printfromtable gSportsUsedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_SHAKEN
+	seteffectprimary
+	goto BattleScript_MoveEnd
 BattleScript_EffectWaterSport::
 	attackcanceler
 	attackstring
@@ -2695,6 +2736,8 @@ BattleScript_EffectWaterSport::
 	waitanimation
 	printfromtable gSportsUsedStringIds
 	waitmessage B_WAIT_TIME_LONG
+	setmoveeffect MOVE_EFFECT_FLOODED
+	seteffectprimary
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectPoisonFang::
@@ -2771,6 +2814,8 @@ BattleScript_CosmicPowerEnd::
 
 BattleScript_EffectSkyUppercut::
 	orword gHitMarker, HITMARKER_IGNORE_ON_AIR
+	accuracycheck BattleScript_EffectHit, 50
+	setmoveeffect MOVE_EFFECT_RECKLESS
 	goto BattleScript_EffectHit
 
 BattleScript_EffectBulkUp::
@@ -3642,6 +3687,25 @@ BattleScript_MoveUsedIsTaunted::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_MoveEnd
 
+BattleScript_SelectingNotAllowedMoveReckless::
+	printselectionstring STRINGID_PKMNCANTUSEMOVERECKLESS
+	endselectionscript
+
+BattleScript_MoveUsedIsReckless::
+	printstring STRINGID_PKMNCANTUSEMOVERECKLESS
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_MoveEnd
+
+BattleScript_AttackWhileHavingReckless::
+	manipulatedamage DMG_RECOIL_FROM_RECKLESS
+	orword gHitMarker, HITMARKER_IGNORE_SUBSTITUTE | HITMARKER_PASSIVE_DAMAGE
+	healthbarupdate BS_ATTACKER
+	datahpupdate BS_ATTACKER
+	printstring STRINGID_PKMNHITWITHRECOIL
+	waitmessage B_WAIT_TIME_SHORT
+	tryfaintmon BS_ATTACKER
+	goto BattleScript_MoveEndAfterRecklessCheck
+
 BattleScript_SelectingNotAllowedMoveTauntInPalace::
 	printstring STRINGID_PKMNCANTUSEMOVETAUNT
 	goto BattleScript_SelectingUnusableMoveInPalace
@@ -3822,6 +3886,11 @@ BattleScript_PiercingTurnDmg::
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_DoStatusTurnDmg
 
+BattleScript_SpookedTurnDmg::
+	printstring STRINGID_PKMNHURTBYSPOOKED
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_DoStatusTurnDmg
+
 BattleScript_MoveUsedIsFrozen::
 	printstring STRINGID_PKMNISFROZEN
 	waitmessage B_WAIT_TIME_LONG
@@ -3975,6 +4044,75 @@ BattleScript_MoveEffectInfestation::
 BattleScript_MoveEffectPiercing::
 	statusanimation BS_EFFECT_BATTLER
 	printfromtable gGotPiercedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+	
+
+BattleScript_MoveEffectNull::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotNullStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectReckless::
+	@ start of the reckless effect
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotRecklessStringIds
+	waitmessage B_WAIT_TIME_LONG
+	@ start of the taunt effect
+	attackcanceler
+	attackstring
+	ppreduce
+	accuracycheck BattleScript_ButItFailed, ACC_CURR_MOVE
+	settaunt BattleScript_ButItFailed
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectFlustered::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotFlusteredStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectShaken::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotShakenStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectPetrified::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotPetrifiedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectSpooked::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotSpookedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectFlooded::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotFloodedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectRooted::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotRootedStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectFear::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotFearStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_UpdateEffectStatusIconRet
+
+BattleScript_MoveEffectBlindness::
+	statusanimation BS_EFFECT_BATTLER
+	printfromtable gGotBlindedStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_UpdateEffectStatusIconRet
 

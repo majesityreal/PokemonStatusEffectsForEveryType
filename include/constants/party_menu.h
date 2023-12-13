@@ -12,6 +12,14 @@
 #define AILMENT_PKRS  6
 #define AILMENT_FNT   7
 #define AILMENT_INF   8
+#define AILMENT_PRC   9
+#define AILMENT_NULL  10
+#define AILMENT_RCK   11
+#define AILMENT_PET   12
+#define AILMENT_FLO   13
+#define AILMENT_RTD   14
+#define AILMENT_BLD   15
+#define AILMENT_SPO   16
 
 #define TUTOR_MOVE_MEGA_PUNCH      0
 #define TUTOR_MOVE_SWORDS_DANCE    1

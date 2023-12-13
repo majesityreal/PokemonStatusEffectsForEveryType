@@ -3220,6 +3220,34 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
     if (type == TYPE_BUG && attacker->ability == ABILITY_SWARM && attacker->hp <= (attacker->maxHP / 3))
         gBattleMovePower = (150 * gBattleMovePower) / 100;
 
+    // MAJESITY - Apply piercing efect defense drop
+    if (defender->status1 & STATUS1_PIERCING)
+        defense /= 2;
+    // MAJESITY - Apply FEAR enraged dragon effects - if attacker has it, does more damage
+    if (gStatuses3[battlerIdAtk] & STATUS3_FEAR) {
+        attack *= 1.25;
+        spAttack *= 1.25;
+    }
+    // MAJESITY - Apply FEAR enraged dragon effects - if defender has it, takes more damage
+    if (gStatuses3[battlerIdDef] & STATUS3_FEAR) {
+        defense *= 0.75;
+        spDefense *= 0.75;
+    }
+    // MAJESITY - shaken effect - if defender has it, takes more damage
+    if (gStatuses3[battlerIdDef] & STATUS3_SHAKEN) {
+        defense *= 0.5;
+        spDefense *= 0.5;
+    }
+    // MAJESITY spooked offense increase
+    if (gStatuses3[battlerIdAtk] & STATUS3_SPOOKED) {
+        attack *= 1.25;
+        spAttack *= 1.25;
+    }
+    // MAJESITY flustered offense decrease
+    if (gStatuses3[battlerIdAtk] & STATUS3_FLUSTERED) {
+        attack *= 0.75;
+        spAttack *= 0.75;
+    }
     // Self-destruct / Explosion cut defense in half
     if (gBattleMoves[gCurrentMove].effect == EFFECT_EXPLOSION)
         defense /= 2;
@@ -3308,6 +3336,10 @@ s32 CalculateBaseDamage(struct BattlePokemon *attacker, struct BattlePokemon *de
 
         damage = (damage / damageHelper);
         damage /= 50;
+
+        // MAJESITY Flooded cuts special attack in half 
+        if ((attacker->status1 & STATUS1_FLOODED))
+            damage /= 2;
 
         // Apply Lightscreen
         if ((sideStatus & SIDE_STATUS_LIGHTSCREEN) && gCritMultiplier == 1)
@@ -4909,7 +4941,7 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
             if ((itemEffect[i] & ITEM3_FREEZE) && HealStatusConditions(mon, partyIndex, STATUS1_FREEZE, battlerId) == 0)
                 retVal = FALSE;
             if ((itemEffect[i] & ITEM3_PARALYSIS) && HealStatusConditions(mon, partyIndex, STATUS1_PARALYSIS, battlerId) == 0)
-                retVal = FALSE;
+                retVal = FALSE; // blinky
             if ((itemEffect[i] & ITEM3_CONFUSION)  // heal confusion
              && gMain.inBattle && battlerId != MAX_BATTLERS_COUNT && (gBattleMons[battlerId].status2 & STATUS2_CONFUSION))
             {

@@ -435,8 +435,7 @@ static bool8 ShouldSwitch(void)
     struct Pokemon *party;
     s32 i;
     s32 availableToSwitch;
-
-    if (gBattleMons[*(activeBattlerPtr = &gActiveBattler)].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION))
+    if ((gBattleMons[*(activeBattlerPtr = &gActiveBattler)].status2 & (STATUS2_WRAPPED | STATUS2_ESCAPE_PREVENTION)) || gBattleMons[gActiveBattler].status1 & STATUS1_ROOTED) // MAJESITY - rooted effect here too
         return FALSE;
     if (gStatuses3[gActiveBattler] & STATUS3_ROOTED)
         return FALSE;

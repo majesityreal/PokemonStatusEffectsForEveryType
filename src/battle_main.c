@@ -3829,9 +3829,20 @@ static void TryDoEventsBeforeFirstTurn(void)
             {
                 if (GetWhoStrikesFirst(gBattlerByTurnOrder[i], gBattlerByTurnOrder[j], TRUE) != 0)
                     SwapTurnOrder(i, j);
+
+                if (GetBattlerSide(i) == B_SIDE_PLAYER && gBattleMons[i].status1 & STATUS1_BLINDNESS) {
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(0), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(3), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(5), PLTT_SIZE_4BPP);
+                }
             }
         }
     }
+
+
+
     if (!gBattleStruct->overworldWeatherDone
         && AbilityBattleEffects(0, 0, 0, ABILITYEFFECT_SWITCH_IN_WEATHER, 0) != 0)
     {
@@ -4042,7 +4053,7 @@ u8 IsRunningFromBattleImpossible(void)
         return BATTLE_RUN_FAILURE;
     }
     if ((gBattleMons[gActiveBattler].status2 & (STATUS2_ESCAPE_PREVENTION | STATUS2_WRAPPED))
-        || (gStatuses3[gActiveBattler] & STATUS3_ROOTED))
+        || (gStatuses3[gActiveBattler] & STATUS3_ROOTED) || (gBattleMons[gActiveBattler].status1 & (STATUS1_ROOTED)))
     {
         gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_CANT_ESCAPE;
         return BATTLE_RUN_FORBIDDEN;
@@ -4622,8 +4633,12 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
         speedBattler1 /= 2;
 
-    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) || (gBattleMons[battler1].status1 & STATUS1_INFESTATION))
+    if ((gBattleMons[battler1].status1 & STATUS1_PARALYSIS) || (gBattleMons[battler1].status1 & STATUS1_INFESTATION) || (gBattleMons[battler1].status1 & STATUS1_PETRIFIED))
         speedBattler1 /= 4;
+    if (gStatuses3[battler1] & STATUS3_SPOOKED) // MAJESITY - spooked gets more speed
+        speedBattler1 *= 4;
+    if (gStatuses3[battler1] & STATUS3_FLUSTERED)
+        speedBattler1 *= (3 / 4);
 
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
         speedBattler1 = UINT_MAX;
@@ -4656,8 +4671,14 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
     if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
         speedBattler2 /= 2;
 
-    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) || (gBattleMons[battler2].status1 & STATUS1_INFESTATION))
+    if ((gBattleMons[battler2].status1 & STATUS1_PARALYSIS) || (gBattleMons[battler2].status1 & STATUS1_INFESTATION) || (gBattleMons[battler2].status1 & STATUS1_PETRIFIED))
         speedBattler2 /= 4;
+
+    if (gStatuses3[battler2] & STATUS3_SPOOKED)
+        speedBattler2 *= 4;
+
+    if (gStatuses3[battler2] & STATUS3_FLUSTERED)
+        speedBattler2 *= (3 / 4);
 
     if (holdEffect == HOLD_EFFECT_QUICK_CLAW && gRandomTurnNumber < (0xFFFF * holdEffectParam) / 100)
         speedBattler2 = UINT_MAX;
@@ -4690,7 +4711,9 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
             moveBattler2 = MOVE_NONE;
     }
 
-    // both move priorities are different than 0
+
+
+    // either move priorities are different than 0
     if (gBattleMoves[moveBattler1].priority != 0 || gBattleMoves[moveBattler2].priority != 0)
     {
         // both priorities are the same
@@ -4717,6 +4740,26 @@ u8 GetWhoStrikesFirst(u8 battler1, u8 battler2, bool8 ignoreChosenMoves)
             strikesFirst = 1; // battler2 has more speed
 
         // else battler1 has more speed
+    }
+
+    // MAJESITY - flooded status check. If both flooded, it is purely on speed because
+    // I don't want spaghetti code and didn't want to make a separate function
+    // also it is very, very unlikely both mons will be flooded at same time AND
+    // at the same time, that one of them uses priority move. If this ends your
+    // nuzlocke run because you couldn't use quick attack before your opponent while
+    // you were both flooded, then go buy a lottery ticket because
+    // that situation is very statistically unlikely. I rest my case
+    if (gBattleMons[battler1].status1 & STATUS1_FLOODED && gBattleMons[battler2].status1 & STATUS1_FLOODED) {
+        if (speedBattler1 == speedBattler2 && Random() & 1)
+            strikesFirst = 2; // same speeds, same priorities
+        else if (speedBattler1 < speedBattler2)
+            strikesFirst = 1; // battler2 has more speed
+    }
+    else if (gBattleMons[battler1].status1 & STATUS1_FLOODED) {
+        strikesFirst = 1;
+    } 
+    else if (gBattleMons[battler2].status1 & STATUS1_FLOODED) {
+        strikesFirst = 0; // this has to be here to override the previous stuff (ik it defaults to 0)
     }
 
     return strikesFirst;

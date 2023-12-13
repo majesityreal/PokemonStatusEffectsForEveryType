@@ -1056,7 +1056,7 @@ static const union AnimCmd *const sSpriteAnimTable_StatusCondition[] = {
 static const struct CompressedSpriteSheet sStatusIconsSpriteSheet =
 {
     .data = gStatusGfx_Icons,
-    .size = 0x380,
+    .size = 0x500,
     .tag = TAG_MON_STATUS
 };
 static const struct CompressedSpritePalette sStatusIconsSpritePalette =
@@ -4059,6 +4059,7 @@ static void CreateSetStatusSprite(void)
     statusAnim = GetMonAilment(&sMonSummaryScreen->currentMon);
     if (statusAnim != 0)
     {
+        statusAnim %= 8;
         StartSpriteAnim(&gSprites[*spriteId], statusAnim - 1);
         SetSpriteInvisibility(SPRITE_ARR_ID_STATUS, FALSE);
     }

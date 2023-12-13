@@ -458,12 +458,16 @@ static const u8 sText_PkmnFloodedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_
 static const u8 sText_PkmnAlreadyHasFlooded[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Flooded.");
 static const u8 sText_PkmnWasRooted[] = _("{B_EFF_NAME_WITH_PREFIX} was Rooted!");
 static const u8 sText_PkmnRootedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nRooted {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnWasFlustered[] = _("{B_EFF_NAME_WITH_PREFIX} was Flustered!");
+static const u8 sText_PkmnFlusteredBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nFlustered {B_EFF_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnAlreadyHasFear[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Fear.");
 static const u8 sText_PkmnWasFear[] = _("{B_EFF_NAME_WITH_PREFIX} was Fear!");
 static const u8 sText_PkmnFearBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nFear {B_EFF_NAME_WITH_PREFIX}!");
 static const u8 sText_PkmnAlreadyHasBlinded[] = _("{B_DEF_NAME_WITH_PREFIX} already\nhas a Blinded.");
 static const u8 sText_PkmnWasBlinded[] = _("{B_EFF_NAME_WITH_PREFIX} was Blinded!");
 static const u8 sText_PkmnBlindedBy[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\nBlinded {B_EFF_NAME_WITH_PREFIX}!");
+static const u8 sText_PkmnCantUseMoveReckless[] = _("{B_ACTIVE_NAME_WITH_PREFIX} can't use\n{B_CURRENT_MOVE} because they are reckless!\p");
+static const u8 sText_PkmnHurtBySpooked[] = _("{B_ATK_NAME_WITH_PREFIX} is hurt\nby its spooked!");
 
 const u8 * const gStatNamesTable[NUM_BATTLE_STATS] =
 {
@@ -937,11 +941,17 @@ const u8 * const gBattleStringsTable[BATTLESTRINGS_COUNT - BATTLESTRINGS_TABLE_S
     [STRINGID_PKMNWASPETRIFIED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasPetrified,          
     [STRINGID_PKMNPETRIFIEDBY- BATTLESTRINGS_TABLE_START] = sText_PkmnPetrifiedBy,            
     [STRINGID_PKMNWASSPOOKED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasSpooked,            
-    [STRINGID_PKMNSPOOKEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnSpookedBy,             
-    [STRINGID_PKMNWASFLOODED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasFlooded,            
+    [STRINGID_PKMNSPOOKEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnSpookedBy,      
+    [STRINGID_PKMNROOTEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnRootedBy,            
+    [STRINGID_PKMNWASROOTED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasRooted,
+    [STRINGID_PKMNWASFLUSTERED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasFlustered,            
+    [STRINGID_PKMNFLUSTEREDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnFlusteredBy,                
     [STRINGID_PKMNFLOODEDBY- BATTLESTRINGS_TABLE_START] =  sText_PkmnFloodedBy,             
+    [STRINGID_PKMNWASFLOODED- BATTLESTRINGS_TABLE_START] =  sText_PkmnWasFlooded,            
     [STRINGID_PKMNWASFEAR- BATTLESTRINGS_TABLE_START] = sText_PkmnWasFear,                
-    [STRINGID_PKMNFEARBY- BATTLESTRINGS_TABLE_START] = sText_PkmnFearBy,                 
+    [STRINGID_PKMNFEARBY- BATTLESTRINGS_TABLE_START] = sText_PkmnFearBy,
+    [STRINGID_PKMNCANTUSEMOVERECKLESS - BATTLESTRINGS_TABLE_START] = sText_PkmnCantUseMoveReckless,     
+    [STRINGID_PKMNHURTBYSPOOKED - BATTLESTRINGS_TABLE_START] = sText_PkmnHurtBySpooked,
 
 };
 

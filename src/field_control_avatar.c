@@ -654,6 +654,15 @@ static bool8 UpdatePoisonStepCounter(void)
             case FLDPSN_FNT:
                 return TRUE;
             }
+            switch (DoPoisonFieldEffect())
+            {
+            case FLDPSN_NONE:
+                return FALSE;
+            case FLDPSN_PSN:
+                return FALSE;
+            case FLDPSN_FNT:
+                return TRUE;
+            }
         }
     }
     return FALSE;

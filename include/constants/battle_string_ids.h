@@ -400,13 +400,15 @@
 #define STRINGID_PKMNFLOODEDBY              399
 #define STRINGID_PKMNWASFEAR                400
 #define STRINGID_PKMNFEARBY                 401
-#define STRINGID_PKMNWASROOTED              401
-#define STRINGID_PKMNROOTEDBY               402
-#define STRINGID_PKMNWASFLUSTERED           401
-#define STRINGID_PKMNFLUSTEREDBY            402
-#define STRINGID_PKMNHURTBYPIERCING         403
+#define STRINGID_PKMNWASROOTED              402
+#define STRINGID_PKMNROOTEDBY               403
+#define STRINGID_PKMNWASFLUSTERED           404
+#define STRINGID_PKMNFLUSTEREDBY            405
+#define STRINGID_PKMNHURTBYPIERCING         406
+#define STRINGID_PKMNCANTUSEMOVERECKLESS    407
+#define STRINGID_PKMNHURTBYSPOOKED          408
 
-#define BATTLESTRINGS_COUNT                 404
+#define BATTLESTRINGS_COUNT                 409
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,

@@ -2,6 +2,7 @@
 #include "malloc.h"
 #include "battle.h"
 #include "battle_anim.h"
+#include "battle_main.h"
 #include "battle_controllers.h"
 #include "battle_gfx_sfx_util.h"
 #include "battle_interface.h"
@@ -280,7 +281,7 @@ static void DisplayPartyPokemonHPBar(u16, u16, struct PartyMenuBox *);
 static void CreatePartyMonIconSpriteParameterized(u16, u32, struct PartyMenuBox *, u8, u32);
 static void CreatePartyMonHeldItemSpriteParameterized(u16, u16, struct PartyMenuBox *);
 static void CreatePartyMonPokeballSpriteParameterized(u16, struct PartyMenuBox *);
-static void CreatePartyMonStatusSpriteParameterized(u16, u8, struct PartyMenuBox *);
+static void CreatePartyMonStatusSpriteParameterized(u16, u16, struct PartyMenuBox *);
 // These next 4 functions are essentially redundant with the above 4
 // The only difference is that rather than receive the data directly they retrieve it from the mon struct
 static void CreatePartyMonHeldItemSprite(struct Pokemon *, struct PartyMenuBox *);
@@ -383,7 +384,7 @@ static void ShowOrHideHeldItemSprite(u16, struct PartyMenuBox *);
 static void CreateHeldItemSpriteForTrade(u8, bool8);
 static void SpriteCB_HeldItem(struct Sprite *);
 static void SetPartyMonAilmentGfx(struct Pokemon *, struct PartyMenuBox *);
-static void UpdatePartyMonAilmentGfx(u8, struct PartyMenuBox *);
+static void UpdatePartyMonAilmentGfx(u16, struct PartyMenuBox *);
 static u8 GetPartyLayoutFromBattleType(void);
 static void Task_SetSacredAshCB(u8);
 static void CB2_ReturnToBagMenu(void);
@@ -1071,8 +1072,9 @@ static void CreatePartyMonSprites(u8 slot)
             CreatePartyMonPokeballSpriteParameterized(gMultiPartnerParty[actualSlot].species, &sPartyMenuBoxes[slot]);
             if (gMultiPartnerParty[actualSlot].hp == 0)
                 status = AILMENT_FNT;
-            else
+            else {
                 status = GetAilmentFromStatus(gMultiPartnerParty[actualSlot].status);
+            }
             CreatePartyMonStatusSpriteParameterized(gMultiPartnerParty[actualSlot].species, status, &sPartyMenuBoxes[slot]);
         }
     }
@@ -1230,6 +1232,8 @@ static void Task_ClosePartyMenu(u8 taskId)
 
 static void Task_ClosePartyMenuAndSetCB2(u8 taskId)
 {
+    s32 i;
+    
     if (!gPaletteFade.active)
     {
         if (gPartyMenu.menuType == PARTY_MENU_TYPE_IN_BATTLE)
@@ -1341,7 +1345,11 @@ static void HandleChooseMonSelection(u8 taskId, s8 *slotPtr)
                 TryGiveItemOrMailToSelectedMon(taskId);
             }
             break;
-        case PARTY_ACTION_SWITCH:
+        case PARTY_ACTION_SWITCH: // this is where you try to switch order outside of battle
+            if (GetMonData(&gPlayerParty[*slotPtr], MON_DATA_STATUS) == STATUS1_ROOTED || GetMonData(&gPlayerParty[gPartyMenu.slotId], MON_DATA_STATUS) == STATUS1_ROOTED) {
+                PlaySE(SE_FAILURE);
+                break;
+            }
             PlaySE(SE_SELECT);
             SwitchSelectedMons(taskId);
             break;
@@ -1920,6 +1928,22 @@ u8 GetAilmentFromStatus(u32 status)
         return AILMENT_BRN;
     if (status & STATUS1_INFESTATION)
         return AILMENT_INF;
+    if (status & STATUS1_PIERCING)
+        return AILMENT_PRC;
+    if (status & STATUS1_NULL)
+        return AILMENT_NULL;
+    if (status & STATUS1_RECKLESS)
+        return AILMENT_RCK;
+    if (status & STATUS1_PETRIFIED)
+        return AILMENT_PET;
+    if (status & STATUS1_FLOODED)
+        return AILMENT_FLO;
+    if (status & STATUS1_ROOTED)
+        return AILMENT_RTD;
+    if (status & STATUS1_BLINDNESS)
+        return AILMENT_BLD;
+    if (status & STATUS3_SPOOKED) // adding this cuz field effect
+        return AILMENT_SPO;
     return AILMENT_NONE;
 }
 
@@ -2762,6 +2786,10 @@ static void Task_HandleSelectionMenuInput(u8 taskId)
             sCursorOptions[sPartyMenuInternal->actions[sPartyMenuInternal->numActions - 1]].func(taskId);
             break;
         default:
+            if (sPartyMenuInternal->actions[input] == 10 && GetMonData(&gPlayerParty[0], MON_DATA_STATUS) == STATUS1_ROOTED) { // MAJESITY - if I am rooted and you choose switch, this is not allowed. We only check for slot 0 because theoretically the player should never be able to move the mon over
+                PlaySE(SE_FAILURE);
+                break;
+            }
             PartyMenuRemoveWindow(&sPartyMenuInternal->windowId[2]);
             sCursorOptions[sPartyMenuInternal->actions[input]].func(taskId);
             break;
@@ -4187,12 +4215,13 @@ static void CreatePartyMonStatusSprite(struct Pokemon *mon, struct PartyMenuBox 
 {
     if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE)
     {
+
         menuBox->statusSpriteId = CreateSprite(&sSpriteTemplate_StatusIcons, menuBox->spriteCoords[4], menuBox->spriteCoords[5], 0);
         SetPartyMonAilmentGfx(mon, menuBox);
     }
 }
 
-static void CreatePartyMonStatusSpriteParameterized(u16 species, u8 status, struct PartyMenuBox *menuBox)
+static void CreatePartyMonStatusSpriteParameterized(u16 species, u16 status, struct PartyMenuBox *menuBox)
 {
     if (species != SPECIES_NONE)
     {
@@ -4207,7 +4236,7 @@ static void SetPartyMonAilmentGfx(struct Pokemon *mon, struct PartyMenuBox *menu
     UpdatePartyMonAilmentGfx(GetMonAilment(mon), menuBox);
 }
 
-static void UpdatePartyMonAilmentGfx(u8 status, struct PartyMenuBox *menuBox)
+static void UpdatePartyMonAilmentGfx(u16 status, struct PartyMenuBox *menuBox)
 {
     switch (status)
     {
@@ -4327,7 +4356,7 @@ static void GetMedicineItemEffectMessage(u16 item)
     case ITEM_EFFECT_CURE_PARALYSIS:
         StringExpandPlaceholders(gStringVar4, gText_PkmnCuredOfParalysis);
         break;
-    case ITEM_EFFECT_CURE_CONFUSION:
+    case ITEM_EFFECT_CURE_CONFUSION: // blinky
         StringExpandPlaceholders(gStringVar4, gText_PkmnSnappedOutOfConfusion);
         break;
     case ITEM_EFFECT_CURE_INFATUATION:
@@ -5281,7 +5310,7 @@ u8 GetItemEffectType(u16 item)
             return ITEM_EFFECT_CURE_FREEZE;
         else if (statusCure == ITEM3_PARALYSIS)
             return ITEM_EFFECT_CURE_PARALYSIS;
-        else if (statusCure == ITEM3_CONFUSION)
+        else if (statusCure == ITEM3_CONFUSION) // blinky
             return ITEM_EFFECT_CURE_CONFUSION;
         else if (itemEffect[0] >> 7 && !statusCure)
             return ITEM_EFFECT_CURE_INFATUATION;
@@ -6097,7 +6126,7 @@ static void UpdatePartyToFieldOrder(void)
     Free(partyBuffer);
 }
 
-static void UNUSED SwitchAliveMonIntoLeadSlot(void)
+static void UNUSED SwitchAliveMonIntoLeadSlot(void) // maj - theory here is that it sends the next available mon into battle. possibly a harder setting than fixed?
 {
     u8 i;
     struct Pokemon *mon;

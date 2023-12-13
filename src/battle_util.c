@@ -35,6 +35,8 @@
 #include "constants/songs.h"
 #include "constants/species.h"
 #include "constants/weather.h"
+#include "constants/rgb.h"
+#include "palette.h"
 
 /*
 NOTE: The data and functions in this file up until (but not including) sSoundMovesTable
@@ -884,7 +886,7 @@ bool8 WasUnableToUseMove(u8 battler)
         || gProtectStructs[battler].usedTauntedMove
         || gProtectStructs[battler].flag2Unknown
         || gProtectStructs[battler].flinchImmobility
-        || gProtectStructs[battler].confusionSelfDmg)
+        || gProtectStructs[battler].confusionSelfDmg) // BLINKY GOES HERE
         return TRUE;
     else
         return FALSE;
@@ -1011,6 +1013,20 @@ u8 TrySetCantSelectMoveBattleScript(void)
             gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveTaunt;
             limitations++;
         }
+    }
+    if (gBattleMons[gActiveBattler].status1 & STATUS1_RECKLESS && gBattleMoves[move].power == 0) { // MAJESITY - reckless is checked here
+        gCurrentMove = move;
+        if (gBattleTypeFlags & BATTLE_TYPE_PALACE)
+        {
+            gPalaceSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveTauntInPalace;
+            gProtectStructs[gActiveBattler].palaceUnableToUseMove = TRUE;
+        }
+        else
+        {
+            gSelectionBattleScripts[gActiveBattler] = BattleScript_SelectingNotAllowedMoveReckless;
+            limitations++;
+        }
+
     }
 
     if (GetImprisonedMovesCount(gActiveBattler, move))
@@ -1443,13 +1459,14 @@ enum
     ENDTURN_ITEMS2,
     ENDTURN_INFESTATION, // Majesity - you have to add everything BEFORE the battler_count because it is used as a size variable (stupid - just name the enum instead)
     ENDTURN_PIERCING,
+    ENDTURN_BLINDNESS,
+    ENDTURN_SPOOKED,
     ENDTURN_BATTLER_COUNT
 };
 
 u8 DoBattlerEndTurnEffects(void)
 {
     u8 effect = 0;
-
     gHitMarker |= (HITMARKER_GRUDGE | HITMARKER_IGNORE_BIDE);
     while (gBattleStruct->turnEffectsBattlerId < gBattlersCount && gBattleStruct->turnEffectsTracker <= ENDTURN_BATTLER_COUNT)
     {
@@ -1557,10 +1574,33 @@ u8 DoBattlerEndTurnEffects(void)
             case ENDTURN_PIERCING:  // piercing
                 if ((gBattleMons[gActiveBattler].status1 & STATUS1_PIERCING) && gBattleMons[gActiveBattler].hp != 0)
                 {
-                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 8;
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 16;
                     if (gBattleMoveDamage == 0)
                         gBattleMoveDamage = 1;
                     BattleScriptExecute(BattleScript_PiercingTurnDmg);
+                    effect++;
+                }
+                gBattleStruct->turnEffectsTracker++;
+                break;
+            case ENDTURN_BLINDNESS:  // blindness
+                if ((gBattleMons[gActiveBattler].status1 & STATUS1_BLINDNESS) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(0), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(1), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(3), PLTT_SIZE_4BPP);
+                    FillPalette(RGB_BLACK, OBJ_PLTT_ID(5), PLTT_SIZE_4BPP);
+                    effect++;
+                }
+                gBattleStruct->turnEffectsTracker++;
+                break;
+            case ENDTURN_SPOOKED:  // spooked
+                if ((gStatuses3[gActiveBattler] & STATUS3_SPOOKED) && gBattleMons[gActiveBattler].hp != 0)
+                {
+                    gBattleMoveDamage = gBattleMons[gActiveBattler].maxHP / 4;
+                    if (gBattleMoveDamage == 0)
+                        gBattleMoveDamage = 1;
+                    BattleScriptExecute(BattleScript_SpookedTurnDmg);
                     effect++;
                 }
                 gBattleStruct->turnEffectsTracker++;
@@ -1753,8 +1793,11 @@ u8 DoBattlerEndTurnEffects(void)
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_TAUNT:  // taunt
-                if (gDisableStructs[gActiveBattler].tauntTimer)
-                    gDisableStructs[gActiveBattler].tauntTimer--;
+                if (gDisableStructs[gActiveBattler].tauntTimer) {
+                    if (!(gBattleMons[gActiveBattler].status1 & STATUS1_RECKLESS)) { // if not reckless, decrement timer
+                        gDisableStructs[gActiveBattler].tauntTimer--;
+                    }
+                }
                 gBattleStruct->turnEffectsTracker++;
                 break;
             case ENDTURN_YAWN:  // yawn
@@ -2143,7 +2186,10 @@ u8 AtkCanceller_UnableToUseMove(void)
             {
                 gProtectStructs[gBattlerAttacker].usedTauntedMove = 1;
                 CancelMultiTurnMoves(gBattlerAttacker);
-                gBattlescriptCurrInstr = BattleScript_MoveUsedIsTaunted;
+                if (gBattleMons[gBattlerAttacker].status1 & STATUS1_RECKLESS) // MAJESITY reckless message if they select status move and are turned reckless that turn
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsReckless;
+                else
+                    gBattlescriptCurrInstr = BattleScript_MoveUsedIsTaunted;
                 gHitMarker |= HITMARKER_UNABLE_TO_USE_MOVE;
                 effect = 1;
             }
@@ -2163,7 +2209,7 @@ u8 AtkCanceller_UnableToUseMove(void)
         case CANCELLER_CONFUSED: // confusion
             if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
             {
-                gBattleMons[gBattlerAttacker].status2 -= STATUS2_CONFUSION_TURN(1);
+                gBattleMons[gBattlerAttacker].status2 -= STATUS2_CONFUSION_TURN(1); // BLINKY
                 if (gBattleMons[gBattlerAttacker].status2 & STATUS2_CONFUSION)
                 {
                     if (Random() & 1)
@@ -3733,7 +3779,7 @@ u8 ItemBattleEffects(u8 caseID, u8 battlerId, bool8 moveTurn)
                         StringCopy(gBattleTextBuff1, gStatusConditionString_IceJpn);
 
                     if (gBattleMons[battlerId].status2 & STATUS2_CONFUSION)
-                        StringCopy(gBattleTextBuff1, gStatusConditionString_ConfusionJpn);
+                        StringCopy(gBattleTextBuff1, gStatusConditionString_ConfusionJpn); // blinky
 
                     gBattleMons[battlerId].status1 = 0;
                     gBattleMons[battlerId].status2 &= ~STATUS2_CONFUSION;
