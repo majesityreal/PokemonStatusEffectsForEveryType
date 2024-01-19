@@ -1,3 +1,10 @@
+const u32 gMonStillFrontPic_Toothless[] = INCBIN_U32("graphics/pokemon/toothless/front.4bpp.lz");
+const u32 gMonPalette_Toothless[] = INCBIN_U32("graphics/pokemon/toothless/normal.gbapal.lz");
+const u32 gMonBackPic_Toothless[] = INCBIN_U32("graphics/pokemon/toothless/back.4bpp.lz");
+const u32 gMonShinyPalette_Toothless[] = INCBIN_U32("graphics/pokemon/toothless/shiny.gbapal.lz");
+const u8 gMonIcon_Toothless[] = INCBIN_U8("graphics/pokemon/toothless/icon.4bpp");
+const u8 gMonFootprint_Toothless[] = INCBIN_U8("graphics/pokemon/toothless/footprint.1bpp");
+
 const u32 gMonStillFrontPic_Bulbasaur[] = INCBIN_U32("graphics/pokemon/bulbasaur/front.4bpp.lz");
 const u32 gMonPalette_Bulbasaur[] = INCBIN_U32("graphics/pokemon/bulbasaur/normal.gbapal.lz");
 const u32 gMonBackPic_Bulbasaur[] = INCBIN_U32("graphics/pokemon/bulbasaur/back.4bpp.lz");

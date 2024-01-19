@@ -551,6 +551,9 @@ static bool8 AreLegendariesInSootopolisPreventingEncounters(void)
 
 bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
 {
+                        MgbaOpen();
+                    MgbaPrintf(3, 'This is running 222');
+                    MgbaClose();
     u16 headerId;
     struct Roamer *roamer;
 
@@ -621,6 +624,9 @@ bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior)
                 // try a regular wild land encounter
                 if (TryGenerateWildMon(gWildMonHeaders[headerId].landMonsInfo, WILD_AREA_LAND, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
                 {
+                    MgbaOpen();
+                    MgbaPrintf(3, 'This is running');
+                    MgbaClose();
                     BattleSetup_StartWildBattle();
                     return TRUE;
                 }

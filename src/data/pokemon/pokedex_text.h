@@ -2319,3 +2319,9 @@ const u8 gDeoxysPokedexText[] = _(
     "extraterrestrial virus exposed to a laser\n"
     "beam. Its body is configured for superior\n"
     "agility and speed.");
+
+const u8 gToothlessPokedexText[] = _(
+    "Not really a POKéMON\n"
+    "It is just a cool meme and an epic dragon\n"
+    "Please dont sue me Dreamworks\n"
+    "I am begging you. I have a family.");

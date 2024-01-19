@@ -11665,4 +11665,34 @@ const struct SpeciesInfo gSpeciesInfo[] =
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     }
+
+    [SPECIES_TOOTHLESS] =
+    {
+        .baseHP        = 95,
+        .baseAttack    = 135,
+        .baseDefense   = 80,
+        .baseSpeed     = 110,
+        .baseSpAttack  = 80,
+        .baseSpDefense = 100,
+        .types = { TYPE_DRAGON, TYPE_ELECTRIC },
+        .catchRate = 3,
+        .expYield = 215,
+        .evYield_HP        = 0,
+        .evYield_Attack    = 0,
+        .evYield_Defense   = 0,
+        .evYield_Speed     = 0,
+        .evYield_SpAttack  = 1,
+        .evYield_SpDefense = 1,
+        .itemCommon = ITEM_NONE,
+        .itemRare   = ITEM_NONE,
+        .genderRatio = PERCENT_FEMALE(0),
+        .eggCycles = 120,
+        .friendship = STANDARD_FRIENDSHIP,
+        .growthRate = GROWTH_SLOW,
+        .eggGroups = { EGG_GROUP_DRAGON, EGG_GROUP_FLYING },
+        .abilities = {ABILITY_STATIC, ABILITY_LEVITATE},
+        .safariZoneFleeRate = 0,
+        .bodyColor = BODY_COLOR_BLACK,
+        .noFlip = FALSE,
+    }
 };
